@@ -23,7 +23,7 @@ function countbodychild(){
 	alert(body_elem.childNodes.length);
 }
 
-
+//初始化工作
 function initGallery(){
 	//检测
 	if(!document.getElementById || !document.getElementsByClassName){
