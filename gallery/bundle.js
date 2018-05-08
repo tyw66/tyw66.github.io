@@ -26,7 +26,7 @@ function initGallery(){
 		}			
 	}
 
-	//
+	//创建并初始化图片显示区节点
 	var imgZone = document.createElement("img");
 	imgZone.setAttribute("id","imgZone");
 	imgZone.setAttribute("src","./myPainting/000.jpg");
