@@ -1,0 +1,25 @@
+body{
+	font-family:"Microsoft YaHei","Arial";
+	color:#888;
+	background-color:#eee;
+	
+}
+
+
+
+#background-zone{
+	width:60%;
+    margin: 0 auto;
+	padding:auto;
+    /*border: 10px solid #aaa;*/
+}
+
+
+.moveItems{
+	display:block;
+	width:20%;
+	position:absolute;
+	float:left;
+	/*left:300px;
+	top:200px;*/
+}
