@@ -8,16 +8,20 @@ body{
 
 
 #background-zone{
-	width:60%;
+	background:url("./images/bg.jpg") no-repeat;
+	position: fixed;
+	width:100%;
+	height:100%;
     margin: 0 auto;
 	padding:auto;
+	background-size:cover;
     /*border: 10px solid #aaa;*/
 }
 
 
 .moveItems{
 	display:block;
-	width:20%;
+	width:10%;
 	position:absolute;
 	float:left;
 	/*left:300px;
