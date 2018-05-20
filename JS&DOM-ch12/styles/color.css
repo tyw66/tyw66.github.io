@@ -54,3 +54,11 @@ article img{
 #imagegallery a{
     background-color: transparent;
 }
+
+header nav a.here:link,
+header nav a.here:visited,
+header nav a.here:hover,
+header nav a.here:active{
+    color: #eef;
+    background-color: #799;
+}

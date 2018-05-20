@@ -7,14 +7,14 @@ section, header, article, nav{
 }
 body{
     margin:1em 10%;
-    background-image: url(../images/background.gif);
+    background-image: url("../images/background.gif");
     background-attachment: fixed;
     background-position: top left;
     background-repeat: repeat-x;
     max-width:80em;
 }
 header{
-    background-image: url(../images/person.png);
+    /* background-image: url("../images/person.png"); */
     background-position: bottom right;
     background-repeat: no-repeat;
     border-width: .1em;
@@ -22,7 +22,7 @@ header{
     border-bottom-width: 0;
 }
 header nav{
-    background-image: url(../images/navbar.gif);
+    background-image: url("../images/navbar.gif");
     background-position: bottom left;
     background-repeat: repeat-x;
     border-width: .1em;
@@ -65,4 +65,24 @@ article img{
     border-style: solid;
     outline-width: .1em;
     outline-style: solid;
+}
+
+#home header{
+    background-image: url("../images/header_home.gif");
+}
+
+#about header{
+    background-image: url("../images/header_about.gif");
+}
+
+#photos header{
+    background-image: url("../images/header_photos.gif");
+}
+
+#live header{
+    background-image: url("../images/header_live.gif");
+}
+
+#contact header{
+    background-image: url("../images/header_contact.gif");
 }
