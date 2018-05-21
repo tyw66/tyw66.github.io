@@ -86,3 +86,22 @@ article img{
 #contact header{
     background-image: url("../images/header_contact.gif");
 }
+
+
+#slidershow{
+    width:150px;
+    height:150px;
+    position:relative;
+    overflow:hidden;
+}
+#preview{
+    position: absolute;
+    border-width: 0;
+    outline-width: 0;
+}
+#frame{
+    position: relative;
+    top:0;
+    left:0;
+    z-index:99;
+}
