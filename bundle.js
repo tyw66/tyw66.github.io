@@ -3,7 +3,7 @@ window.onload = init();
 function init(){
 	var date = new Date(); 
 	var setupDate=new Date();
-	setupDate.setFullYear(2017,7,16);	
+	setupDate.setFullYear(2017,8,16);	
 	var time=date.getTime()-setupDate.getTime();
 	//计算出相差天数
 	var days=Math.floor(time/(24*3600*1000))
