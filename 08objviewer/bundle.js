@@ -145,6 +145,7 @@ function main(){
 			//加载后
 			function(obj){					
 				console.log("obj load finish.");	
+				document.getElementById("state-output").innerHTML = "Load finish.";
 				//函数traverse(callback)遍历调用者和调用者的所有后代，callback参数是一个函数，被调用者和每一个后代对象调用callback(this)。	
 				obj.traverse(function ( child ) {
 					if ( child instanceof THREE.Mesh ) {
@@ -169,6 +170,7 @@ function main(){
 			//加载中
 			function(xhr){
 				console.log("On obj model Progress.....");
+				document.getElementById("state-output").innerHTML = "Loading....Please Wait.";
 			},
 			//加载出错
 			function(xhr){

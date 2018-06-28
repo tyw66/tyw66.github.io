@@ -21,6 +21,7 @@ function mk_model(objName,textureName,x,y,z){
 
 	// load model
 	var onProgress = function ( xhr ) {
+		document.getElementById("state-output").innerHTML = "Loading....Please Wait.";
 		if ( xhr.lengthComputable ) {
 			var percentComplete = xhr.loaded / xhr.total * 100;
 			console.log( Math.round(percentComplete, 2) + '% downloaded' );
@@ -32,6 +33,8 @@ function mk_model(objName,textureName,x,y,z){
 	var loader = new THREE.OBJLoader( manager );
 	var object;
 	loader.load( objName, function ( object ) {
+		
+		document.getElementById("state-output").innerHTML = "Load finish.";
 		object.traverse( function ( child ) {
 			if ( child instanceof THREE.Mesh ) {
 				child.material.map = texture;
@@ -66,11 +69,18 @@ function init() {
 	scene.add( camera );
 
 	// load model
-	var obj1 = mk_model('model/sphere.obj','texture/1.png',-50,10,0);
-	var obj2 = mk_model('model/sphere.obj','texture/2.png',50,10,0);
-	var obj3 = mk_model('model/sphere.obj','texture/3.png',-50,-30,0);
-	var obj4 = mk_model('model/sphere.obj','texture/4.png',50,-30,0);
-
+	if(window.innerWidth > window.innerHeight){
+		var obj1 = mk_model('model/sphere.obj','texture/1.png',-50,10,0);
+		var obj2 = mk_model('model/sphere.obj','texture/2.png',50,10,0);
+		var obj3 = mk_model('model/sphere.obj','texture/3.png',-50,-30,0);
+		var obj4 = mk_model('model/sphere.obj','texture/4.png',50,-30,0);
+	}
+	else{
+		var obj1 = mk_model('model/sphere.obj','texture/1.png',0,50,0);
+		var obj2 = mk_model('model/sphere.obj','texture/2.png',0,10,0);
+		var obj3 = mk_model('model/sphere.obj','texture/3.png',0,-30,0);
+		var obj4 = mk_model('model/sphere.obj','texture/4.png',0,-70,0);
+	}
 	
 	//setup renderer
 	renderer = new THREE.WebGLRenderer();
