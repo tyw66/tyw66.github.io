@@ -66,10 +66,10 @@ function init() {
 	scene.add( camera );
 
 	// load model
-	var obj1 = mk_model('models/sphere.obj','texture/1.png',-50,10,0);
-	var obj2 = mk_model('models/sphere.obj','texture/2.png',50,10,0);
-	var obj3 = mk_model('models/sphere.obj','texture/3.png',-50,-30,0);
-	var obj4 = mk_model('models/sphere.obj','texture/4.png',50,-30,0);
+	var obj1 = mk_model('model/sphere.obj','texture/1.png',-50,10,0);
+	var obj2 = mk_model('model/sphere.obj','texture/2.png',50,10,0);
+	var obj3 = mk_model('model/sphere.obj','texture/3.png',-50,-30,0);
+	var obj4 = mk_model('model/sphere.obj','texture/4.png',50,-30,0);
 
 	
 	//setup renderer

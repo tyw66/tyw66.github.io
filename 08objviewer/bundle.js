@@ -19,7 +19,7 @@ function main(){
 	var mouseX = 0;
 	var mouseY = 0;
 	//相机离物体的距离
-	var view_distance = 30;
+	var view_distance = 150;
 	
 	//加载管理器
 	var loadManager = new THREE.LoadingManager();
@@ -29,13 +29,13 @@ function main(){
 	var mat = new THREE.MeshBasicMaterial();
 
 	//路径
-	var objPath = '../assets/obj_lego/lego.obj';
-	var mtlPath = '../assets/obj_lego/jade.mtl';
-	var texturePath = '../assets/obj_lego/lego.png';
+	var objPath = './res/obj_lego/lego.obj';
+	var mtlPath = './res/obj_lego/lego.mtl';
+	var texturePath = './res/obj_lego/lego.png';
 
 	//GUI
 	var controls = new function () {
-		this.zoomDist = 30;
+		this.zoomDist = 150;
 		this.model = "lego-spiderman";
 	};
 	var gui = new dat.GUI();
@@ -79,9 +79,12 @@ function main(){
 
 
 		//布局
-		document.body.appendChild( renderer.domElement );				
+		var viewer = document.getElementById('main-part');
+		viewer.appendChild( renderer.domElement );
+		//document.body.appendChild( renderer.domElement );				
 		document.addEventListener( 'mousemove', onDocumentMouseMove, false );
-		document.addEventListener( 'DOMMouseScroll' ,onDocumentMouseWheel, false);
+ 		viewer.addEventListener( 'DOMMouseScroll' ,onDocumentMouseWheel, false);//for firfox?
+		//viewer.addEventListener( 'mousewheel' ,onDocumentMouseWheel, false);//for chorme？
 		window.addEventListener( 'resize', onWindowResize, false );
 	}
 
@@ -127,9 +130,12 @@ function main(){
 	//加载模型	
 	function loadMyObjModel(objPath_,mtlPath_,texturePath_){
 		//加载纹理
-		if(!texturePath_){//判断为空todo
+		if(texturePath_){//判断为空todo
 			var textureLoader = new THREE.TextureLoader(loadManager);
 			var texture = textureLoader.load(texturePath_);
+		}
+		else{
+			console.log("纹理路径为空");
 		}
 
 		//加载模型 + 图片纹理			
@@ -151,6 +157,7 @@ function main(){
 						obj.traverse( function ( child ) {
 							if ( child instanceof THREE.Mesh ) {
 								child.material.map = texture;
+								child.position.set(0,-50,0);
 							}
 						} );
 						scene.add(obj);

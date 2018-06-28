@@ -2,18 +2,32 @@
 <html lang="en">
 	<head>
 		<title>ObjViewer - OBJ查看器</title>
+		<link rel="icon" href="../common/icon.ico" type="image/x-icon">
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 		<style>
 			body{
 				overflow:hidden;
 			}
+			#left-part{
+				width:25%;	
+			}		
+			#main-part{
+				width:75%;	
+				border:1px solid #ccc;
+				float:right;
+			}
 		</style>
 	</head>
 
 	<body>
-		<div id="info">
-			<a href="#" target="_blank">Viewer </a> 
+		<div id="left-part">
+			<a href="https://threejs.org/" target="_blank">Powered by Three.js</a> 
+		</div>
+		
+		<div id='main-part'>
+		
+		
 		</div>
 
 		<script src="../lib/threejs/three.min.js" type="text/javascript"></script>

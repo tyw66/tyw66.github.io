@@ -2,6 +2,7 @@
 <html lang="en">
 	<head>
 		<title>Sphere-Sketch</title>
+		<link rel="icon" href="../common/icon.ico" type="image/x-icon">
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 		<style>
@@ -276,6 +277,7 @@
 			
 			function onDocumentMouseWheel( event ) {
 				if(event.detail == -3){//向前滚
+					console.log("向前滚");
 					view_distance -= 10;					
 				}
 				else{//向后滚
