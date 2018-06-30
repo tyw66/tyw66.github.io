@@ -12,5 +12,5 @@ newmtl 01___Default
 	Kd 0.5882 0.5882 0.5882
 	Ks 1.0260 1.0260 1.0260
 	Ke 0.0000 0.0000 0.0000
-	map_Ka D:\Code\tyw66.github.io\08objviewer\res\obj_lego\lego.png
-	map_Kd D:\Code\tyw66.github.io\08objviewer\res\obj_lego\lego.png
+	map_Ka ./res/obj_lego/lego.png
+	map_Kd ./res/obj_lego/lego.png

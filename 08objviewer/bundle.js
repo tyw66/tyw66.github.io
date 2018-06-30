@@ -16,9 +16,13 @@ function main() {
 	var lastModel;
 
 	//路径变量
-	var objPath = './res/obj_lego/lego.obj';
-	var mtlPath = './res/obj_lego/lego.mtl';
-	var texturePath = './res/obj_lego/lego.png';
+	var objPath;
+	var mtlPath;
+	var texturePath;
+
+	objPath = './res/obj_lego/lego.obj';
+	mtlPath = './res/obj_lego/lego.mtl';
+	texturePath = './res/obj_lego/lego.png';
 
 	//dat-GUI
 	var controls = new function () {
@@ -27,17 +31,17 @@ function main() {
 	};
 	var gui = new dat.GUI();
 	gui.add(controls, "zoomDist", 0, 1000);
-	gui.add(controls, "model", ["乐高蜘蛛侠", "玉", "立方体"]).onChange(function (e) {
+	gui.add(controls, "model", ["乐高蜘蛛侠", "玉"]).onChange(function (e) {
 		if (e == "乐高蜘蛛侠") {
 			objPath = './res/obj_lego/lego.obj';
-			mtlPath = '';
+			mtlPath = './res/obj_lego/lego.mtl';
 			texturePath = './res/obj_lego/lego.png';
 			loadMyObjModel(objPath, mtlPath, texturePath);
 		}
 		else if (e == "玉") {
 			objPath = './res/obj_jade/jade.obj';
 			mtlPath = './res/obj_jade/jade.mtl';
-			texturePath = '';
+			texturePath = './res/obj_jade/jade.png';
 			loadMyObjModel(objPath, mtlPath, texturePath);
 		}
 	});
@@ -123,7 +127,7 @@ function main() {
 	};
 	//加载模型	
 	function loadMyObjModel(objPath_, mtlPath_, texturePath_) {
-		//检查
+		//检查路径
 		document.getElementById("state-output1").innerHTML = "";
 		if (!objPath_) {
 			document.getElementById("state-output1").innerHTML = "找不到obj文件路径，加载终止.";
@@ -135,16 +139,21 @@ function main() {
 		if (!texturePath_) {
 			document.getElementById("state-output1").innerHTML += "贴图文件：空。";
 		}
-		else {
-			//加载纹理
-			var textureLoader = new THREE.TextureLoader(loadManager);
-			var texture = textureLoader.load(texturePath_);
-		}
-
-
-		//加载模型 + 图片纹理			
-	
+				
 		var objloader = new THREE.OBJLoader(loadManager);
+		var mtlloader = new THREE.MTLLoader();
+		var textureLoader = new THREE.TextureLoader(loadManager);
+		
+		//加载纹理
+		var texture = textureLoader.load(texturePath_);
+		
+		//加载MTL
+		mtlloader.load(mtlPath_, function (materials) {
+			materials.preload();
+			//objloader.setMaterials(materials);
+		});
+
+		//加载模型
 		objloader.load(objPath_,
 			//加载后
 			function (obj) {
@@ -174,7 +183,7 @@ function main() {
 				console.log(xhr);
 			}
 		);
-		// return objMesh;
+
 	}
 
 
