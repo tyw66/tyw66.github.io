@@ -1,2 +1,1 @@
-# ObjViewer
-Obj model viewer by three.js
+# 全景图DEMO
