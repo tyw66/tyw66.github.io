@@ -80,12 +80,12 @@
 
 		new THREE.MTLLoader()
 			.setPath( './model/' )
-			.load( 'home.mtl', function ( materials ) {
+			.load( 'test.mtl', function ( materials ) {
 				materials.preload();
 				new THREE.OBJLoader()
 					.setMaterials( materials )
 					.setPath( './model/' )
-					.load( 'home.obj', function ( object ) {
+					.load( 'test.obj', function ( object ) {
 						//object.position.y = - 95;
 						scene.add( object );
 					}, onProgress, onError );
