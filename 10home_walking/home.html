@@ -18,6 +18,9 @@
             margin: 0;
             overflow: hidden;
         }
+		#comment{
+			text-align: center;
+		}
     </style>
 </head>
 
@@ -25,7 +28,7 @@
 
 <div id="Stats-output">
 </div>
-<div>
+<div id="comment">
 	使用WASD进行移动，滑动鼠标查看四周。
 </div>
 <div id="WebGL-output">
@@ -38,28 +41,36 @@
 		//一、建立场景
         var scene = new THREE.Scene();
 
-        var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100000);
+        var camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100000);
         camera.position.x = 100;
-        camera.position.y = 80;
+        camera.position.y = 66;
         camera.position.z = 500;
         camera.lookAt(scene.position);
 		//camera.lookAt(0,0,-1);
 
-        var ambientLight = new THREE.AmbientLight(0xFFFFFF);
+        var ambientLight = new THREE.AmbientLight(0x888888);
         scene.add(ambientLight);		
 		
-		var spotLight = new THREE.SpotLight( 0xffffff, 1 );
-		spotLight.position.set( 0, 500, -500 );
-		spotLight.angle = Math.PI / 4;
-		
-		spotLight.castShadow = true;
-		spotLight.shadow.mapSize.width = 1024;
-		spotLight.shadow.mapSize.height = 1024;
-		spotLight.shadow.camera.near = 10;
-		spotLight.shadow.camera.far = 200;
-		scene.add( spotLight );
+		//var light = new THREE.DirectionalLight( 0xffffff, 0.2, 100 );
+		//light.position.set( 0, 500, -500 );
+		//light.target.position.set( 0, 0, 0 );
+		//light.angle = Math.PI / 4;
+		//light.castShadow = true;
+		//light.receiveShadow = true;
+		//light.shadow.mapSize.width = 10;
+		//light.shadow.mapSize.height = 10;
+		//light.shadow.camera.near = 10;
+		//light.shadow.camera.far = 20;
+		//scene.add( light );
 
-		//var lightHelper = new THREE.SpotLightHelper( spotLight );
+		var spotLight = new THREE.SpotLight(0xffffff,0.6);
+        spotLight.position.set(0, 500, -500);
+        spotLight.castShadow = true;
+        scene.add(spotLight);
+		
+		
+		
+		//var lightHelper = new THREE.SpotLightHelper( light );
 		//scene.add( lightHelper );
 		
 		
@@ -80,13 +91,14 @@
 
 		new THREE.MTLLoader()
 			.setPath( './model/' )
-			.load( 'test.mtl', function ( materials ) {
+			.load( 'home.mtl', function ( materials ) {
 				materials.preload();
 				new THREE.OBJLoader()
 					.setMaterials( materials )
 					.setPath( './model/' )
-					.load( 'test.obj', function ( object ) {
+					.load( 'home.obj', function ( object ) {
 						//object.position.y = - 95;
+						object.receiveShadow = true;
 						scene.add( object );
 					}, onProgress, onError );
 
@@ -97,7 +109,7 @@
 		var renderer = new THREE.WebGLRenderer();
         renderer.setClearColor(0x999999, 1.0);
         renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.shadowMapEnabled = true;
+		renderer.shadowMap.enabled = true;
         document.getElementById("WebGL-output").appendChild(renderer.domElement);
 		
 		//三、建立事件侦测与其他部分
@@ -111,9 +123,10 @@
 		firstPersonControl.lookVertical = true;
 		firstPersonControl.noFly = true;
 		firstPersonControl.constrainVertical = true; //约束垂直
-		//firstPersonControl.verticalMin = 1.0;
-		//firstPersonControl.verticalMax = 2.0;
-		//firstPersonControl.lon = 60; //进入初始视角x轴的角度
+		
+		firstPersonControl.verticalMin = 1.0;
+		firstPersonControl.verticalMax = 2.0;
+		firstPersonControl.lon = -50; //进入初始视角x轴的角度
 		//firstPersonControl.lat = 0; //初始视角进入后y轴的角度
 
 	
@@ -126,7 +139,7 @@
             stats.update();   
 			firstPersonControl.update(clock.getDelta());
    			//updateView();
-			camera.position.y = 70;//摄影机高度维持在人眼的高度
+			camera.position.y = 66;//摄影机高度维持在人眼的高度
             requestAnimationFrame(render);
             renderer.render(scene, camera);
         }
