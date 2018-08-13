@@ -74,8 +74,8 @@
 		//scene.add( lightHelper );
 		
 		
-		var AxesHelper = new THREE.AxesHelper(10000);
-		scene.add(AxesHelper);	
+		//var AxesHelper = new THREE.AxesHelper(10000);
+		//scene.add(AxesHelper);	
 
         // 导入模型
 		var onProgress = function ( xhr ) {
@@ -91,31 +91,36 @@
 
 		new THREE.MTLLoader()
 			.setPath( './model/' )
-			.load( 'home.mtl', function ( materials ) {
+			.load( 'for_test.mtl', function ( materials ) {
 				materials.preload();
 				new THREE.OBJLoader()
 					.setMaterials( materials )
 					.setPath( './model/' )
-					.load( 'home.obj', function ( object ) {
-						//object.position.y = - 95;
-						object.receiveShadow = true;
+					.load( 'for_test.obj', function ( object ) {
+						object.traverse(function(o){
+							o.receiveShadow = true;
+							console.log(o.name);							
+						});						
 						scene.add( object );
 					}, onProgress, onError );
 
 			} );
+			
+			
+			//TEMP
+					//var geometry = new THREE.BoxBufferGeometry( 20, 20, 20 );
+					//			var object = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: Math.random() * 0xffffff } ) );
 
-
-		//二、建立渲染器
-		var renderer = new THREE.WebGLRenderer();
-        renderer.setClearColor(0x999999, 1.0);
-        renderer.setSize(window.innerWidth, window.innerHeight);
-		renderer.shadowMap.enabled = true;
-        document.getElementById("WebGL-output").appendChild(renderer.domElement);
-		
-		//三、建立事件侦测与其他部分
-		//var orbitControl = new THREE.OrbitControls(camera,document.getElementById("WebGL-output"));
-		var stats = initStats();
-				
+								   var cubeGeometry = new THREE.BoxGeometry(40, 40, 40);
+        var cubeMaterial = new THREE.MeshPhongMaterial({color: 0xff00ff, wireframe: true});
+        var object = new THREE.Mesh(cubeGeometry, cubeMaterial);
+        object.position.x = -400;
+        object.position.y = 300;
+        object.position.z = 100;
+		object.name = "tyw";
+					scene.add( object );
+			
+		//相机控制
 		var clock = new THREE.Clock();
 		var firstPersonControl = new THREE.FirstPersonControls(camera);
 		firstPersonControl.lookSpeed = 0.05; //鼠标移动查看的速度
@@ -128,18 +133,77 @@
 		firstPersonControl.verticalMax = 2.0;
 		firstPersonControl.lon = -50; //进入初始视角x轴的角度
 		//firstPersonControl.lat = 0; //初始视角进入后y轴的角度
+		
 
+		//二、建立渲染器
+		var renderer = new THREE.WebGLRenderer();
+        renderer.setClearColor(0x999999, 1.0);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+		renderer.shadowMap.enabled = true;
+        document.getElementById("WebGL-output").appendChild(renderer.domElement);
+		
+		
+
+		
+		//三、建立事件侦测与其他部分
+		//var orbitControl = new THREE.OrbitControls(camera,document.getElementById("WebGL-output"));
+		var stats = initStats();
+		
+		var mouse = new THREE.Vector2();
+		var INTERSECTED ;
+		document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+				
+		var raycaster = new THREE.Raycaster();
 	
 		//四、渲染器渲染场景
         render();
 
 		
-		
+
         function render() {
             stats.update();   
 			firstPersonControl.update(clock.getDelta());
    			//updateView();
 			camera.position.y = 66;//摄影机高度维持在人眼的高度
+			
+			
+			//
+			raycaster.setFromCamera( mouse, camera );
+			var intersects = raycaster.intersectObjects( scene.children );
+			
+			console.log("intersects lenth:"+intersects.length);
+			
+			//scene.traverse(function(o){
+			//	console.log("select:"+o.name);
+			//});
+			
+			if ( intersects.length > 0 ) {
+				console.log("AAA");
+
+				if ( INTERSECTED != intersects[ 0 ].object ) {
+					console.log("BBB");
+					if ( INTERSECTED ){
+						console.log("CCC");
+						INTERSECTED.material.color.setHex( INTERSECTED.currentHex );
+						
+					}
+				
+					INTERSECTED = intersects[ 0 ].object;
+					INTERSECTED.currentHex = INTERSECTED.material.color.getHex();
+					INTERSECTED.material.color.setHex( 0xff0000 );
+
+						
+				}
+
+			} else {
+
+				if ( INTERSECTED ) INTERSECTED.material.color.setHex( INTERSECTED.currentHex );
+
+				INTERSECTED = null;
+
+			}
+			
+			
             requestAnimationFrame(render);
             renderer.render(scene, camera);
         }
@@ -155,6 +219,14 @@
             return stats;
         }
 
+		function onDocumentMouseMove( event ) {
+
+			event.preventDefault();
+
+			mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+			mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
+		}
 		
     }
     window.onload = init;
