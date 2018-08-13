@@ -90,13 +90,13 @@
 		//THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
 
 		new THREE.MTLLoader()
-			.setPath( './model/' )
-			.load( 'for_test.mtl', function ( materials ) {
+			.setPath( './model/813/' )
+			.load( 'home_813.mtl', function ( materials ) {
 				materials.preload();
 				new THREE.OBJLoader()
 					.setMaterials( materials )
-					.setPath( './model/' )
-					.load( 'for_test.obj', function ( object ) {
+					.setPath( './model/813/' )
+					.load( 'home_813.obj', function ( object ) {
 						object.traverse(function(o){
 							o.receiveShadow = true;
 							console.log(o.name);							
