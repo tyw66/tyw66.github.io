@@ -36,8 +36,20 @@
 
 <!-- Javascript ThreeJs code -->
 <script type="text/javascript">
-
+    window.onload = init;
+	
     function init() {
+		//建立场景，包括相机、渲染器
+		//createScene();
+		//建立灯光
+		//createLights();
+		//建立模型
+		//createModel();
+		//建立控制器
+		//createControl();
+		//建立事件关联
+		//createListener();
+	
 		//一、建立场景
         var scene = new THREE.Scene();
 
@@ -67,15 +79,13 @@
         spotLight.position.set(0, 500, -500);
         spotLight.castShadow = true;
         scene.add(spotLight);
-		
-		
-		
+			
 		//var lightHelper = new THREE.SpotLightHelper( light );
 		//scene.add( lightHelper );
 		
 		
-		//var AxesHelper = new THREE.AxesHelper(10000);
-		//scene.add(AxesHelper);	
+		var AxesHelper = new THREE.AxesHelper(10000);
+		scene.add(AxesHelper);	
 
         // 导入模型
 		var onProgress = function ( xhr ) {
@@ -97,9 +107,10 @@
 					.setMaterials( materials )
 					.setPath( './model/' )
 					.load( 'for_test.obj', function ( object ) {
+						object.rotateY(180);
 						object.traverse(function(o){
 							o.receiveShadow = true;
-							console.log(o.name);							
+							console.log(o.name);
 						});						
 						scene.add( object );
 					}, onProgress, onError );
@@ -107,18 +118,18 @@
 			} );
 			
 			
-			//TEMP
-					//var geometry = new THREE.BoxBufferGeometry( 20, 20, 20 );
-					//			var object = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: Math.random() * 0xffffff } ) );
+		//TEMP
+		//var geometry = new THREE.BoxBufferGeometry( 20, 20, 20 );
+		//var object = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: Math.random() * 0xffffff } ) );
 
-								   var cubeGeometry = new THREE.BoxGeometry(40, 40, 40);
-        var cubeMaterial = new THREE.MeshPhongMaterial({color: 0xff00ff, wireframe: true});
+		var cubeGeometry = new THREE.BoxGeometry(40, 40, 40);
+        var cubeMaterial = new THREE.MeshPhongMaterial({color: 0xf58cff, wireframe: false});
         var object = new THREE.Mesh(cubeGeometry, cubeMaterial);
-        object.position.x = -400;
-        object.position.y = 300;
-        object.position.z = 100;
+        object.position.x = 0;
+        object.position.y = 0;
+        object.position.z = 300;
 		object.name = "tyw";
-					scene.add( object );
+		scene.add( object );
 			
 		//相机控制
 		var clock = new THREE.Clock();
@@ -169,25 +180,22 @@
 			
 			//
 			raycaster.setFromCamera( mouse, camera );
-			var intersects = raycaster.intersectObjects( scene.children );
+			var intersects = raycaster.intersectObjects( scene.children , true);
 			
-			console.log("intersects lenth:"+intersects.length);
+			//console.log("intersects lenth:"+intersects.length);
 			
-			//scene.traverse(function(o){
-			//	console.log("select:"+o.name);
-			//});
 			
 			if ( intersects.length > 0 ) {
+				scene.traverse(function(o){
+					console.log("scene children:"+o.name);
+				});
 				console.log("AAA");
-
 				if ( INTERSECTED != intersects[ 0 ].object ) {
 					console.log("BBB");
 					if ( INTERSECTED ){
 						console.log("CCC");
 						INTERSECTED.material.color.setHex( INTERSECTED.currentHex );
-						
 					}
-				
 					INTERSECTED = intersects[ 0 ].object;
 					INTERSECTED.currentHex = INTERSECTED.material.color.getHex();
 					INTERSECTED.material.color.setHex( 0xff0000 );
@@ -229,7 +237,7 @@
 		}
 		
     }
-    window.onload = init;
+
 
 	
 </script>
