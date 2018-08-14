@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-cn">
 <head>
     <title>室内漫游 - tyw66</title>
 	<link rel="icon" href="../common/icon.ico" type="image/x-icon">
@@ -18,9 +18,27 @@
             margin: 0;
             overflow: hidden;
         }
-		#comment{
+		#comment{			
+			position:absolute; 
+			top:10px; 
+			left:10px; 
+			z-index:1000;	
+			color:#FFF;
+
 			text-align: center;
 		}
+		#info-area{
+			position:absolute; 
+			top:40px; 
+			left:10px; 
+			z-index:1000;
+			
+			text-align: center;
+			color:#FFF;
+			font-size:3em;
+			
+		}
+
     </style>
 </head>
 
@@ -31,6 +49,9 @@
 <div id="comment">
 	使用WASD进行移动，滑动鼠标查看四周。
 </div>
+<div id="info-area">
+ 
+</div>
 <div id="WebGL-output">
 </div>
 
@@ -39,6 +60,11 @@
     window.onload = init;
 	
     function init() {
+		//初始化通用变量
+		var WIDTH = window.innerWidth;
+		var HIGHT = window.innerHeight;
+		var mouse = new THREE.Vector2();
+		
 		//建立场景，包括相机、渲染器
 		createScene();
 		//建立灯光
@@ -53,12 +79,11 @@
 		createListener();
 		//渲染相机里场景
         render();
-	
-	
+
 		var scene, camera, renderer;		
 		function createScene(){
 			scene = new THREE.Scene();
-			camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100000);
+			camera = new THREE.PerspectiveCamera(60,  WIDTH/HIGHT , 0.1, 100000);
 			camera.position.x = 100;
 			camera.position.y = 66;
 			camera.position.z = 500;
@@ -72,6 +97,8 @@
 
 			renderer.shadowMap.enabled = true;
 			document.getElementById("WebGL-output").appendChild(renderer.domElement);
+			
+	
 		}
 		
 		var ambientLight, spotLight, light, lightHelper;
@@ -134,7 +161,7 @@
 			test.position.y = 0;
 			test.position.z = 300;
 			test.name = "testmodel";
-			scene.add( test );		
+			//scene.add( test );		
 		
 		}
 
@@ -157,14 +184,18 @@
 			//orbitControl = new THREE.OrbitControls(camera,document.getElementById("WebGL-output"));
 		}
 
-		var stats, AxesHelper, mouse;
+		var stats, AxesHelper;
+		var infoArea;
+		var INTERSECTED, raycaster ;//上一帧选择的物体
 		function createItem(){
 			AxesHelper = new THREE.AxesHelper(10000);
 			scene.add(AxesHelper);	
 			
-			stats = initStats();
-			mouse = new THREE.Vector2();
+			stats = initStats();			
 
+			infoArea = document.getElementById("info-area");
+			
+			raycaster = new THREE.Raycaster();
 		}
 
 		function createListener(){
@@ -193,7 +224,7 @@
             stats.setMode(0); // 0: fps, 1: ms
             // Align top-left
             stats.domElement.style.position = 'absolute';
-            stats.domElement.style.left = '0px';
+            stats.domElement.style.right = '0px';
             stats.domElement.style.top = '0px';
             document.getElementById("Stats-output").appendChild(stats.domElement);
             return stats;
@@ -203,31 +234,34 @@
 			event.preventDefault();
 			mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
 			mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+			//mouse.x = ( event.clientX / WIDTH ) * 2 - 1;
+			//mouse.y = - ( event.clientY / HIGHT ) * 2 + 1;
 
 		}
 		
-		//光线投射
-		var INTERSECTED, raycaster ;
+		//光线投射		
 		function intersect(){
-			raycaster = new THREE.Raycaster();
 			raycaster.setFromCamera( mouse, camera );
 			var intersects = raycaster.intersectObjects( scene.children , true);			
-			if ( intersects.length > 0 ) {
-				if ( INTERSECTED != intersects[ 0 ].object ) {
-					if ( INTERSECTED ){
+			if ( intersects.length > 0 ) {//当前选择了一个物体
+				if ( INTERSECTED != intersects[ 0 ].object ) {//如果选择的是一个新物体
+					if ( INTERSECTED ){//恢复上一物体的颜色
 						INTERSECTED.material.color.setHex( INTERSECTED.currentHex );
 					}
-					INTERSECTED = intersects[ 0 ].object;
-					INTERSECTED.currentHex = INTERSECTED.material.color.getHex();
-					INTERSECTED.material.color.setHex( 0xff0000 );		
-					INTERSECTED.material.transparent = true;
+					INTERSECTED = intersects[ 0 ].object;//取intersects变量的第一个元素作为拾取到的
+						
+					if(INTERSECTED.name != ""){
+						INTERSECTED.currentHex = INTERSECTED.material.color.getHex();//颜色备份
+						INTERSECTED.material.color.setHex( 0xFF0000 );			
+						infoArea.innerHTML = INTERSECTED.name;
+					}
 				}
-			} else {
-				if ( INTERSECTED ){
-					INTERSECTED.material.color.setHex( INTERSECTED.currentHex );
-					INTERSECTED.material.transparent = false;
+			} else {//当前没有选中物体
+				if ( INTERSECTED ){//如果上一帧选择了物体
+					INTERSECTED.material.color.setHex( INTERSECTED.currentHex );//恢复上一物体的颜色
 				} 
 				INTERSECTED = null;
+				infoArea.innerHTML = "-";
 			}			
 		}
 		
