@@ -40,177 +40,149 @@
 	
     function init() {
 		//建立场景，包括相机、渲染器
-		//createScene();
+		createScene();
 		//建立灯光
-		//createLights();
+		createLights();
 		//建立模型
-		//createModel();
+		createModel();
 		//建立控制器
-		//createControl();
+		createControl();
+		//建立其他对象
+		createItem();
 		//建立事件关联
-		//createListener();
-	
-		//一、建立场景
-        var scene = new THREE.Scene();
-
-        var camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100000);
-        camera.position.x = 100;
-        camera.position.y = 66;
-        camera.position.z = 500;
-        camera.lookAt(scene.position);
-		//camera.lookAt(0,0,-1);
-
-        var ambientLight = new THREE.AmbientLight(0x888888);
-        scene.add(ambientLight);		
-		
-		//var light = new THREE.DirectionalLight( 0xffffff, 0.2, 100 );
-		//light.position.set( 0, 500, -500 );
-		//light.target.position.set( 0, 0, 0 );
-		//light.angle = Math.PI / 4;
-		//light.castShadow = true;
-		//light.receiveShadow = true;
-		//light.shadow.mapSize.width = 10;
-		//light.shadow.mapSize.height = 10;
-		//light.shadow.camera.near = 10;
-		//light.shadow.camera.far = 20;
-		//scene.add( light );
-
-		var spotLight = new THREE.SpotLight(0xffffff,0.6);
-        spotLight.position.set(0, 500, -500);
-        spotLight.castShadow = true;
-        scene.add(spotLight);
-			
-		//var lightHelper = new THREE.SpotLightHelper( light );
-		//scene.add( lightHelper );
-		
-		
-		var AxesHelper = new THREE.AxesHelper(10000);
-		scene.add(AxesHelper);	
-
-        // 导入模型
-		var onProgress = function ( xhr ) {
-			if ( xhr.lengthComputable ) {
-				var percentComplete = xhr.loaded / xhr.total * 100;
-				console.log( Math.round( percentComplete, 2 ) + '% downloaded' );
-			}
-		};
-
-		var onError = function ( xhr ) { };
-
-		//THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
-
-		new THREE.MTLLoader()
-			.setPath( './model/' )
-			.load( 'for_test.mtl', function ( materials ) {
-				materials.preload();
-				new THREE.OBJLoader()
-					.setMaterials( materials )
-					.setPath( './model/' )
-					.load( 'for_test.obj', function ( object ) {
-						object.rotateY(180);
-						object.traverse(function(o){
-							o.receiveShadow = true;
-							console.log(o.name);
-						});						
-						scene.add( object );
-					}, onProgress, onError );
-
-			} );
-			
-			
-		//TEMP
-		//var geometry = new THREE.BoxBufferGeometry( 20, 20, 20 );
-		//var object = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: Math.random() * 0xffffff } ) );
-
-		var cubeGeometry = new THREE.BoxGeometry(40, 40, 40);
-        var cubeMaterial = new THREE.MeshPhongMaterial({color: 0xf58cff, wireframe: false});
-        var object = new THREE.Mesh(cubeGeometry, cubeMaterial);
-        object.position.x = 0;
-        object.position.y = 0;
-        object.position.z = 300;
-		object.name = "tyw";
-		scene.add( object );
-			
-		//相机控制
-		var clock = new THREE.Clock();
-		var firstPersonControl = new THREE.FirstPersonControls(camera);
-		firstPersonControl.lookSpeed = 0.05; //鼠标移动查看的速度
-		firstPersonControl.movementSpeed = 100; //相机移动速度
-		firstPersonControl.lookVertical = true;
-		firstPersonControl.noFly = true;
-		firstPersonControl.constrainVertical = true; //约束垂直
-		
-		firstPersonControl.verticalMin = 1.0;
-		firstPersonControl.verticalMax = 2.0;
-		firstPersonControl.lon = -50; //进入初始视角x轴的角度
-		//firstPersonControl.lat = 0; //初始视角进入后y轴的角度
-		
-
-		//二、建立渲染器
-		var renderer = new THREE.WebGLRenderer();
-        renderer.setClearColor(0x999999, 1.0);
-        renderer.setSize(window.innerWidth, window.innerHeight);
-		renderer.shadowMap.enabled = true;
-        document.getElementById("WebGL-output").appendChild(renderer.domElement);
-		
-		
-
-		
-		//三、建立事件侦测与其他部分
-		//var orbitControl = new THREE.OrbitControls(camera,document.getElementById("WebGL-output"));
-		var stats = initStats();
-		
-		var mouse = new THREE.Vector2();
-		var INTERSECTED ;
-		document.addEventListener( 'mousemove', onDocumentMouseMove, false );
-				
-		var raycaster = new THREE.Raycaster();
-	
-		//四、渲染器渲染场景
+		createListener();
+		//渲染相机里场景
         render();
+	
+	
+		var scene, camera, renderer;		
+		function createScene(){
+			scene = new THREE.Scene();
+			camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100000);
+			camera.position.x = 100;
+			camera.position.y = 66;
+			camera.position.z = 500;
+			camera.lookAt(scene.position);
+			//camera.lookAt(0,0,-1);	  
+			//camera.updateProjectionMatrix();
+			
+			renderer = new THREE.WebGLRenderer();
+			renderer.setClearColor(0x999999, 1.0);
+			renderer.setSize(window.innerWidth, window.innerHeight);
 
+			renderer.shadowMap.enabled = true;
+			document.getElementById("WebGL-output").appendChild(renderer.domElement);
+		}
 		
+		var ambientLight, spotLight, light, lightHelper;
+		function createLights(){
+			ambientLight = new THREE.AmbientLight(0x888888);
+			scene.add(ambientLight);		
+			
+			//var light = new THREE.DirectionalLight( 0xffffff, 0.2, 100 );
+			//light.position.set( 0, 500, -500 );
+			//light.target.position.set( 0, 0, 0 );
+			//light.angle = Math.PI / 4;
+			//light.castShadow = true;
+			//light.receiveShadow = true;
+			//light.shadow.mapSize.width = 10;
+			//light.shadow.mapSize.height = 10;
+			//light.shadow.camera.near = 10;
+			//light.shadow.camera.far = 20;
+			//scene.add( light );
+
+			spotLight = new THREE.SpotLight(0xffffff,0.6);
+			spotLight.position.set(0, 500, -500);
+			spotLight.castShadow = true;
+			scene.add(spotLight);
+				
+			//lightHelper = new THREE.SpotLightHelper( light );
+			//scene.add( lightHelper );		
+		}
+	
+		function createModel(){
+			var onProgress = function ( xhr ) {
+				if ( xhr.lengthComputable ) {
+					var percentComplete = xhr.loaded / xhr.total * 100;
+					console.log( Math.round( percentComplete, 2 ) + '% downloaded' );
+				}
+			};
+
+			var onError = function ( xhr ) { };
+			new THREE.MTLLoader()
+				.setPath( './model/' )
+				.load( 'for_test.mtl', function ( materials ) {
+					materials.preload();
+					new THREE.OBJLoader()
+						.setMaterials( materials )
+						.setPath( './model/' )
+						.load( 'for_test.obj', function ( object ) {
+							object.rotateY(180);
+							object.traverse(function(o){
+								o.receiveShadow = true;
+								console.log(o.name);
+							});						
+							scene.add( object );
+						}, onProgress, onError );
+				} );			
+				
+			//TEMP
+			var cubeGeometry = new THREE.BoxGeometry(40, 40, 40);
+			var cubeMaterial = new THREE.MeshPhongMaterial({color: 0xf58cff, wireframe: false});
+			var test = new THREE.Mesh(cubeGeometry, cubeMaterial);
+			test.position.x = 0;
+			test.position.y = 0;
+			test.position.z = 300;
+			test.name = "testmodel";
+			scene.add( test );		
+		
+		}
+
+		var clock, firstPersonControl, orbitControl;
+		function createControl(){
+			//相机控制
+			clock = new THREE.Clock();
+			firstPersonControl = new THREE.FirstPersonControls(camera);
+			firstPersonControl.lookSpeed = 0.05; //鼠标移动查看的速度
+			firstPersonControl.movementSpeed = 100; //相机移动速度
+			firstPersonControl.lookVertical = true;
+			firstPersonControl.noFly = true;
+			firstPersonControl.constrainVertical = true; //约束垂直
+			
+			firstPersonControl.verticalMin = 1.0;
+			firstPersonControl.verticalMax = 2.0;
+			firstPersonControl.lon = -50; //进入初始视角x轴的角度
+			//firstPersonControl.lat = 0; //初始视角进入后y轴的角度		
+
+			//orbitControl = new THREE.OrbitControls(camera,document.getElementById("WebGL-output"));
+		}
+
+		var stats, AxesHelper, mouse;
+		function createItem(){
+			AxesHelper = new THREE.AxesHelper(10000);
+			scene.add(AxesHelper);	
+			
+			stats = initStats();
+			mouse = new THREE.Vector2();
+
+		}
+
+		function createListener(){
+			document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+		
+		}
+
+
 
         function render() {
             stats.update();   
+			
 			firstPersonControl.update(clock.getDelta());
-   			//updateView();
-			camera.position.y = 66;//摄影机高度维持在人眼的高度
+			//摄影机高度维持在人眼的高度
+			camera.position.y = 66;
 			
-			
-			//
-			raycaster.setFromCamera( mouse, camera );
-			var intersects = raycaster.intersectObjects( scene.children , true);
-			
-			//console.log("intersects lenth:"+intersects.length);
-			
-			
-			if ( intersects.length > 0 ) {
-				scene.traverse(function(o){
-					console.log("scene children:"+o.name);
-				});
-				console.log("AAA");
-				if ( INTERSECTED != intersects[ 0 ].object ) {
-					console.log("BBB");
-					if ( INTERSECTED ){
-						console.log("CCC");
-						INTERSECTED.material.color.setHex( INTERSECTED.currentHex );
-					}
-					INTERSECTED = intersects[ 0 ].object;
-					INTERSECTED.currentHex = INTERSECTED.material.color.getHex();
-					INTERSECTED.material.color.setHex( 0xff0000 );
-
-						
-				}
-
-			} else {
-
-				if ( INTERSECTED ) INTERSECTED.material.color.setHex( INTERSECTED.currentHex );
-
-				INTERSECTED = null;
-
-			}
-			
+			//相交判断
+			intersect();
 			
             requestAnimationFrame(render);
             renderer.render(scene, camera);
@@ -228,13 +200,37 @@
         }
 
 		function onDocumentMouseMove( event ) {
-
 			event.preventDefault();
-
 			mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
 			mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 
 		}
+		
+		//光线投射
+		var INTERSECTED, raycaster ;
+		function intersect(){
+			raycaster = new THREE.Raycaster();
+			raycaster.setFromCamera( mouse, camera );
+			var intersects = raycaster.intersectObjects( scene.children , true);			
+			if ( intersects.length > 0 ) {
+				if ( INTERSECTED != intersects[ 0 ].object ) {
+					if ( INTERSECTED ){
+						INTERSECTED.material.color.setHex( INTERSECTED.currentHex );
+					}
+					INTERSECTED = intersects[ 0 ].object;
+					INTERSECTED.currentHex = INTERSECTED.material.color.getHex();
+					INTERSECTED.material.color.setHex( 0xff0000 );		
+					INTERSECTED.material.transparent = true;
+				}
+			} else {
+				if ( INTERSECTED ){
+					INTERSECTED.material.color.setHex( INTERSECTED.currentHex );
+					INTERSECTED.material.transparent = false;
+				} 
+				INTERSECTED = null;
+			}			
+		}
+		
 		
     }
 
