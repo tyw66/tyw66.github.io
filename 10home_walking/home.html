@@ -47,7 +47,7 @@
 <div id="Stats-output">
 </div>
 <div id="comment">
-	使用WASD进行移动，滑动鼠标查看四周。
+	使用WASD进行移动，滑动鼠标查看四周。（初次加载较慢，模型大小4MB）
 </div>
 <div id="info-area">
  
@@ -67,7 +67,7 @@
 		mouse.x = mouse.y = 0;
 			
 		var infoArea = document.getElementById("info-area");
-		var modelList = ["main"];
+		var modelList = ["main","door","furniture","biped","decorate"];
 								
 		var raycaster = new THREE.Raycaster();
 		var INTERSECTED;//上一帧选择的物体
@@ -136,34 +136,9 @@
 		}
 	
 
-		function createModel(modelList){
-			var onProgress = function ( xhr ) {
-				if ( xhr.lengthComputable ) {
-					var percentComplete = xhr.loaded / xhr.total * 100;
-					console.log( Math.round( percentComplete, 2 ) + '% downloaded' );
-				}
-			};
-			var onError = function ( xhr ) { };
-			
+		function createModel(){			
 			for(var i = 0; i < modelList.length; i++){	
-				var modelName = modelList[i];
-				new THREE.MTLLoader()
-					.setPath( './model/' ).load( modelName+".mtl", 
-						function ( materials ) {
-							materials.preload();
-							new THREE.OBJLoader()
-								.setMaterials( materials )
-								.setPath( './model/' ).load( modelName+".obj", 
-								function ( object ) {
-									object.rotateY(180);
-									object.traverse(function(o){
-										o.receiveShadow = true;
-										console.log(o.name);
-									});						
-									scene.add( object );
-								}, onProgress, onError );
-						},onProgress, onError );	
-						
+				loadModel('./model/', modelList[i]);
 			}
 				
 			//TEMP test
@@ -174,9 +149,39 @@
 			test.position.y = 0;
 			test.position.z = 300;
 			test.name = "testmodel";
-			//scene.add( test );		
+			//scene.add( test );	
 		
 		}
+		
+		function loadModel(path,modelName){
+			var onProgress = function ( xhr ) {
+				if ( xhr.lengthComputable ) {
+					var percentComplete = xhr.loaded / xhr.total * 100;
+					console.log( Math.round( percentComplete, 2 ) + '% downloaded' );
+				}
+			};
+			var onError = function ( xhr ) { };
+			
+			new THREE.MTLLoader()
+				.setPath( path ).load( modelName+".mtl", 
+					function ( materials ) {
+						materials.preload();
+						new THREE.OBJLoader()
+							.setMaterials( materials )
+							.setPath( path ).load( modelName+".obj", 
+							function ( object ) {
+								//object.rotateY(180);
+								object.traverse(function(o){
+									o.receiveShadow = true;
+									console.log(o.name);
+								});						
+								scene.add( object );
+							}, onProgress, onError );
+					},onProgress, onError );	
+			
+			//console.log("finish:"+modelName);		
+		}
+		
 
 		var clock, firstPersonControl, orbitControl;
 		function createControl(){
