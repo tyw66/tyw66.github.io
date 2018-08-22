@@ -64,16 +64,24 @@
 		var WIDTH = window.innerWidth;
 		var HIGHT = window.innerHeight;
 		var mouse = new THREE.Vector2();
-		
+		mouse.x = mouse.y = 0;
+			
+		var infoArea = document.getElementById("info-area");
+		var modelList = ["main"];
+								
+		var raycaster = new THREE.Raycaster();
+		var INTERSECTED;//上一帧选择的物体
+			
+			
 		//建立场景，包括相机、渲染器
 		createScene();
 		//建立灯光
 		createLights();
 		//建立模型
-		createModel();
+		createModel(modelList);
 		//建立控制器
 		createControl();
-		//建立其他对象
+		//建立辅助性对象
 		createItem();
 		//建立事件关联
 		createListener();
@@ -127,33 +135,38 @@
 			//scene.add( lightHelper );		
 		}
 	
-		function createModel(){
+
+		function createModel(modelList){
 			var onProgress = function ( xhr ) {
 				if ( xhr.lengthComputable ) {
 					var percentComplete = xhr.loaded / xhr.total * 100;
 					console.log( Math.round( percentComplete, 2 ) + '% downloaded' );
 				}
 			};
-
 			var onError = function ( xhr ) { };
-			new THREE.MTLLoader()
-				.setPath( './model/' )
-				.load( 'for_test.mtl', function ( materials ) {
-					materials.preload();
-					new THREE.OBJLoader()
-						.setMaterials( materials )
-						.setPath( './model/' )
-						.load( 'for_test.obj', function ( object ) {
-							object.rotateY(180);
-							object.traverse(function(o){
-								o.receiveShadow = true;
-								console.log(o.name);
-							});						
-							scene.add( object );
-						}, onProgress, onError );
-				} );			
+			
+			for(var i = 0; i < modelList.length; i++){	
+				var modelName = modelList[i];
+				new THREE.MTLLoader()
+					.setPath( './model/' ).load( modelName+".mtl", 
+						function ( materials ) {
+							materials.preload();
+							new THREE.OBJLoader()
+								.setMaterials( materials )
+								.setPath( './model/' ).load( modelName+".obj", 
+								function ( object ) {
+									object.rotateY(180);
+									object.traverse(function(o){
+										o.receiveShadow = true;
+										console.log(o.name);
+									});						
+									scene.add( object );
+								}, onProgress, onError );
+						},onProgress, onError );	
+						
+			}
 				
-			//TEMP
+			//TEMP test
 			var cubeGeometry = new THREE.BoxGeometry(40, 40, 40);
 			var cubeMaterial = new THREE.MeshPhongMaterial({color: 0xf58cff, wireframe: false});
 			var test = new THREE.Mesh(cubeGeometry, cubeMaterial);
@@ -185,17 +198,13 @@
 		}
 
 		var stats, AxesHelper;
-		var infoArea;
-		var INTERSECTED, raycaster ;//上一帧选择的物体
 		function createItem(){
 			AxesHelper = new THREE.AxesHelper(10000);
-			scene.add(AxesHelper);	
+			//scene.add(AxesHelper);	
 			
 			stats = initStats();			
 
-			infoArea = document.getElementById("info-area");
-			
-			raycaster = new THREE.Raycaster();
+
 		}
 
 		function createListener(){
@@ -207,14 +216,14 @@
 
         function render() {
             stats.update();   
-			
-			firstPersonControl.update(clock.getDelta());
+			//if(Math.abs(mouse.x) > 0.2 || Math.abs(mouse.y) > 0.2 ){
+			firstPersonControl.update(clock.getDelta());			
+			//}
 			//摄影机高度维持在人眼的高度
 			camera.position.y = 66;
 			
 			//相交判断
 			intersect();
-			
             requestAnimationFrame(render);
             renderer.render(scene, camera);
         }
@@ -242,30 +251,83 @@
 		//光线投射		
 		function intersect(){
 			raycaster.setFromCamera( mouse, camera );
-			var intersects = raycaster.intersectObjects( scene.children , true);			
-			if ( intersects.length > 0 ) {//当前选择了一个物体
-				if ( INTERSECTED != intersects[ 0 ].object ) {//如果选择的是一个新物体
-					if ( INTERSECTED ){//恢复上一物体的颜色
-						INTERSECTED.material.color.setHex( INTERSECTED.currentHex );
+
+			var intersects = raycaster.intersectObjects( scene.children , true );
+			//1 当前选择了一个物体
+			if ( intersects.length > 0 ) {
+				//1.1 如果选择的是一个新物体
+				if ( INTERSECTED != intersects[ 0 ].object ) {
+					//1.1.1 恢复上一物体的颜色
+					if ( INTERSECTED ){							
+						//>判断对象上是否有多材质
+						if(INTERSECTED.material instanceof Array){
+							//>>高亮拾取对象中的每一个材质
+							for(var i= 0; i < INTERSECTED.material.length; i++){
+								var mat = INTERSECTED.material[i];	
+								mat.emissive.setHex("#000");	//不发光						
+							}
+						}
+						else{		
+							//>>恢复上一物体的颜色，一个材质			
+							INTERSECTED.material.emissive.setHex("#000");
+						}						
+					}	
+					//////////////////////////////////////////////////////////////////////////
+					//1.1.2 取intersects变量的第一个元素作为拾取到的
+					INTERSECTED = intersects[ 0 ].object;
+					//>判断对象上是否有多材质
+					if(INTERSECTED.material instanceof Array){
+						//>>高亮拾取对象中的每一个材质
+						for(var i= 0; i < INTERSECTED.material.length; i++){
+							var mat = INTERSECTED.material[i];						
+							INTERSECTED.currentHex = mat.emissive.getHex();
+							mat.emissive.setHex( 0xff0000 );			
+						}
 					}
-					INTERSECTED = intersects[ 0 ].object;//取intersects变量的第一个元素作为拾取到的
-						
-					if(INTERSECTED.name != ""){
-						INTERSECTED.currentHex = INTERSECTED.material.color.getHex();//颜色备份
-						INTERSECTED.material.color.setHex( 0xFF0000 );			
-						infoArea.innerHTML = INTERSECTED.name;
+					else{
+						//>>高亮拾取对象，一个材质
+						INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
+						INTERSECTED.material.emissive.setHex( 0xff0000 );					
+						//console.log(INTERSECTED.currentHex);
 					}
+					
+					infoArea.innerHTML = INTERSECTED.name;
+					//console.log("new item.");
+
 				}
-			} else {//当前没有选中物体
-				if ( INTERSECTED ){//如果上一帧选择了物体
-					INTERSECTED.material.color.setHex( INTERSECTED.currentHex );//恢复上一物体的颜色
-				} 
-				INTERSECTED = null;
+				//1.2 如果选择没有变，还是同一个物体 
+				else{
+					//console.log("no change.");
+				}
+			}
+			//2 当前没有选中物体
+			else {
+				//2.1 如果上一帧选择了物体,恢复物体颜色	（同1.1.1）
+				if ( INTERSECTED ){							
+					//判断对象上是否有多材质
+					if(INTERSECTED.material instanceof Array){
+						//>>高亮拾取对象中的每一个材质
+						for(var i= 0; i < INTERSECTED.material.length; i++){
+							var mat = INTERSECTED.material[i];	
+							mat.emissive.setHex("#000");							
+						}
+					}
+					else{		
+						//>>恢复上一物体的颜色，一个材质			
+						INTERSECTED.material.emissive.setHex("#000");
+					}
+					
+				}	
+				//2.2 置空
 				infoArea.innerHTML = "-";
-			}			
+				INTERSECTED = null;
+
+			}
+				
+				
+	
+		
 		}
-		
-		
     }
 
 

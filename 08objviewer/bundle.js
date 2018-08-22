@@ -22,7 +22,7 @@ function main() {
 
 	objPath = './res/obj_lego/lego.obj';
 	mtlPath = './res/obj_lego/lego.mtl';
-	texturePath = './res/obj_lego/lego.png';
+	//texturePath = './res/obj_lego/lego.png';
 
 	//dat-GUI
 	var controls = new function () {
@@ -31,17 +31,23 @@ function main() {
 	};
 	var gui = new dat.GUI();
 	gui.add(controls, "zoomDist", 0, 1000);
-	gui.add(controls, "model", ["乐高蜘蛛侠", "玉"]).onChange(function (e) {
+	gui.add(controls, "model", ["乐高蜘蛛侠", "玉","家"]).onChange(function (e) {
 		if (e == "乐高蜘蛛侠") {
 			objPath = './res/obj_lego/lego.obj';
 			mtlPath = './res/obj_lego/lego.mtl';
-			texturePath = './res/obj_lego/lego.png';
+			//texturePath = './res/obj_lego/lego.png';
 			loadMyObjModel(objPath, mtlPath, texturePath);
 		}
 		else if (e == "玉") {
 			objPath = './res/obj_jade/jade.obj';
 			mtlPath = './res/obj_jade/jade.mtl';
-			texturePath = './res/obj_jade/jade.png';
+			//texturePath = './res/obj_jade/jade.png';
+			loadMyObjModel(objPath, mtlPath, texturePath);
+		}
+		else if (e == "家") {
+			objPath = './res/obj_home/home.obj';
+			mtlPath = './res/obj_home/home.mtl';
+			//texturePath = './res/obj_home/home.png';
 			loadMyObjModel(objPath, mtlPath, texturePath);
 		}
 	});
