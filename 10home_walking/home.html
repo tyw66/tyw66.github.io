@@ -67,7 +67,7 @@
 		mouse.x = mouse.y = 0;
 			
 		var infoArea = document.getElementById("info-area");
-		var modelList = ["main","door","furniture","biped","decorate"];
+		var modelList = ["main","door","furniture","biped","decorate","other"];
 								
 		var raycaster = new THREE.Raycaster();
 		var INTERSECTED;//上一帧选择的物体
@@ -280,22 +280,23 @@
 					//////////////////////////////////////////////////////////////////////////
 					//1.1.2 取intersects变量的第一个元素作为拾取到的
 					INTERSECTED = intersects[ 0 ].object;
-					//>判断对象上是否有多材质
-					if(INTERSECTED.material instanceof Array){
-						//>>高亮拾取对象中的每一个材质
-						for(var i= 0; i < INTERSECTED.material.length; i++){
-							var mat = INTERSECTED.material[i];						
-							INTERSECTED.currentHex = mat.emissive.getHex();
-							mat.emissive.setHex( 0xff0000 );			
+					if(INTERSECTED.name != "主体"){//主体不做处理
+						//>判断对象上是否有多材质
+						if(INTERSECTED.material instanceof Array){
+							//>>高亮拾取对象中的每一个材质
+							for(var i= 0; i < INTERSECTED.material.length; i++){
+								var mat = INTERSECTED.material[i];						
+								INTERSECTED.currentHex = mat.emissive.getHex();
+								mat.emissive.setHex( 0xff0000 );			
+							}
 						}
+						else{
+							//>>高亮拾取对象，一个材质
+							INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
+							INTERSECTED.material.emissive.setHex( 0xff0000 );					
+							//console.log(INTERSECTED.currentHex);
+						}										
 					}
-					else{
-						//>>高亮拾取对象，一个材质
-						INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
-						INTERSECTED.material.emissive.setHex( 0xff0000 );					
-						//console.log(INTERSECTED.currentHex);
-					}
-					
 					infoArea.innerHTML = INTERSECTED.name;
 					//console.log("new item.");
 
