@@ -21,8 +21,8 @@
 			color:#794025;
 		}
 		h1{
-			color:#888;
-			font-size:30px;
+			color:#000;
+			font-size:26px;
 			text-align:center;
 		}	
 		li{
@@ -30,7 +30,7 @@
 			list-style-type:circle;
 		}
 		.main-body{
-			margin:0px auto;
+			margin:40px auto;
 			width:100%;
 		}		
 		.item{
@@ -41,19 +41,28 @@
 			border-radius:2px;
 			float:left;
 			width:400px;
+			height:100px
 		}	
 		.item-title{
 			padding:2px auto;
 			text-align:center;
 			background-color:#68ccbe;
 		}
+		.fix-title{
+			width:100%;
+			height:40px;
+			background-color:#e6b700;
+			position:fixed;
+			top:0;
+		}
 	</style>
 </head>
 
 <body>
-<div class="main-body">
+<div class="fix-title">	
 	<h1>各种[官方]参考文档网站收集</h1>
-
+</div>
+<div class="main-body">
 	<div class="item">
 		<p class="item-title">C++</p>
 		<ul>
