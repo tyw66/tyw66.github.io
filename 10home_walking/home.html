@@ -4,6 +4,8 @@
     <title>室内漫游 - tyw66</title>
 	<link rel="icon" href="../common/icon.ico" type="image/x-icon">
 	<meta charset='utf-8' />
+	<meta name="description" content="Visual house Walking. Use three.js and 3dsMax." />
+	<meta name="author" content="tyw66: tyw66@qq.com" />
     <script type="text/javascript" src="../lib/ThreeJS/three.min.js"></script>	
 	<script type="text/javascript" src="../lib/ThreeJS/OBJLoader.js"></script>
 	<script type="text/javascript" src="../lib/ThreeJS/MTLLoader.js"></script>	
@@ -46,15 +48,20 @@
 
 <div id="Stats-output">
 </div>
+
 <div id="comment">
-	使用WASD进行移动，滑动鼠标查看四周。
-</div>
-<div id="info-area">
- 
-</div>
-<div id="WebGL-output">
+	使用WASD进行移动，滑动鼠标查看四周。（初次加载较慢，模型大小4MB）
 </div>
 
+<div id="info-area">
+</div>
+
+<div id="WebGL-output">
+</div>
+<!--
+ <audio src="http://fs.w.kugou.com/201808301743/57217451ddf8b533ff81a3dba86fcc8a/G119/M07/00/09/V5QEAFox_hWAO70yADOpSxhZ3Mk004.mp3" 	controls autoplay>空空如也 
+</audio>
+-->
 <!-- Javascript ThreeJs code -->
 <script type="text/javascript">
     window.onload = init;
@@ -67,8 +74,8 @@
 		mouse.x = mouse.y = 0;
 			
 		var infoArea = document.getElementById("info-area");
-		var modelList = ["main"];
-								
+		var modelList = ["main","door","furniture","biped","decorate","other"];
+		//var modelList = ["for_test"]		
 		var raycaster = new THREE.Raycaster();
 		var INTERSECTED;//上一帧选择的物体
 			
@@ -92,20 +99,21 @@
 		function createScene(){
 			scene = new THREE.Scene();
 			camera = new THREE.PerspectiveCamera(60,  WIDTH/HIGHT , 0.1, 100000);
-			camera.position.x = 100;
-			camera.position.y = 66;
-			camera.position.z = 500;
+			camera.position.x = -57;//100
+			camera.position.y = 66;//66
+			camera.position.z = -33;//500
 			camera.lookAt(scene.position);
-			//camera.lookAt(0,0,-1);	  
+			camera.lookAt(-1,0,-1);	  
 			//camera.updateProjectionMatrix();
 			
 			renderer = new THREE.WebGLRenderer();
-			renderer.setClearColor(0x999999, 1.0);
+			renderer.setClearColor(0xdddddd, 1.0);
 			renderer.setSize(window.innerWidth, window.innerHeight);
 
 			renderer.shadowMap.enabled = true;
-			document.getElementById("WebGL-output").appendChild(renderer.domElement);
 			
+			document.getElementById("WebGL-output").appendChild(renderer.domElement);
+			 
 	
 		}
 		
@@ -114,29 +122,61 @@
 			ambientLight = new THREE.AmbientLight(0x888888);
 			scene.add(ambientLight);		
 			
-			//var light = new THREE.DirectionalLight( 0xffffff, 0.2, 100 );
-			//light.position.set( 0, 500, -500 );
-			//light.target.position.set( 0, 0, 0 );
-			//light.angle = Math.PI / 4;
-			//light.castShadow = true;
-			//light.receiveShadow = true;
-			//light.shadow.mapSize.width = 10;
-			//light.shadow.mapSize.height = 10;
-			//light.shadow.camera.near = 10;
-			//light.shadow.camera.far = 20;
-			//scene.add( light );
+			var light = new THREE.DirectionalLight( 0xDDDDDD, 1.0 );
+			light.position.set( 0, 500, -500 );//0, 500, -500
+			light.target.position.set( 180, 25, -67 );
+			light.angle = Math.PI / 8;
+			light.castShadow = true;
+			light.receiveShadow = true;
+			light.shadow.mapSize.width = 20;
+			light.shadow.mapSize.height = 20;
+			light.shadow.camera.near = 1;
+			light.shadow.camera.far = 20;
+			scene.add( light );
 
-			spotLight = new THREE.SpotLight(0xffffff,0.6);
-			spotLight.position.set(0, 500, -500);
-			spotLight.castShadow = true;
-			scene.add(spotLight);
+			//spotLight = new THREE.SpotLight(0xffffff,0.6);
+			//spotLight.position.set(25, 20, -60);
+			//spotLight.castShadow = true;
+			//scene.add(spotLight);
 				
-			//lightHelper = new THREE.SpotLightHelper( light );
+			lightHelper = new THREE.SpotLightHelper( light );
 			//scene.add( lightHelper );		
 		}
 	
 
-		function createModel(modelList){
+		function createModel(){			
+			for(var i = 0; i < modelList.length; i++){	
+				loadModel('./model/', modelList[i]);
+			}
+				
+			//TEMP test
+			var cubeGeometry = new THREE.BoxGeometry(40, 40, 40);
+			var cubeMaterial = new THREE.MeshPhongMaterial({color: 0xf58cff, wireframe: false});
+			var test = new THREE.Mesh(cubeGeometry, cubeMaterial);
+			test.position.x = 131;
+			test.position.y = 20;
+			test.position.z = -323;
+			test.name = "testmodel";
+			test.receiveShadow = true;
+			test.castShadow = true;
+			scene.add( test );	
+			
+			var cubeGeometry1 = new THREE.BoxGeometry(20, 20, 20);
+			var cubeMaterial1 = new THREE.MeshPhongMaterial({color: 0x145c9f, wireframe: false});
+			var test1 = new THREE.Mesh(cubeGeometry1, cubeMaterial1);
+			test1.position.x = 200;
+			test1.position.y = 10;
+			test1.position.z = -283;
+			test1.name = "testmodel1";
+			test1.receiveShadow = true;
+			test1.castShadow = true;
+			scene.add( test1 );	
+			
+	
+
+		}
+		
+		function loadModel(path,modelName){
 			var onProgress = function ( xhr ) {
 				if ( xhr.lengthComputable ) {
 					var percentComplete = xhr.loaded / xhr.total * 100;
@@ -145,38 +185,36 @@
 			};
 			var onError = function ( xhr ) { };
 			
-			for(var i = 0; i < modelList.length; i++){	
-				var modelName = modelList[i];
-				new THREE.MTLLoader()
-					.setPath( './model/' ).load( modelName+".mtl", 
-						function ( materials ) {
-							materials.preload();
-							new THREE.OBJLoader()
-								.setMaterials( materials )
-								.setPath( './model/' ).load( modelName+".obj", 
-								function ( object ) {
-									object.rotateY(180);
-									object.traverse(function(o){
-										o.receiveShadow = true;
-										console.log(o.name);
-									});						
-									scene.add( object );
-								}, onProgress, onError );
-						},onProgress, onError );	
-						
-			}
-				
-			//TEMP test
-			var cubeGeometry = new THREE.BoxGeometry(40, 40, 40);
-			var cubeMaterial = new THREE.MeshPhongMaterial({color: 0xf58cff, wireframe: false});
-			var test = new THREE.Mesh(cubeGeometry, cubeMaterial);
-			test.position.x = 0;
-			test.position.y = 0;
-			test.position.z = 300;
-			test.name = "testmodel";
-			//scene.add( test );		
-		
+			new THREE.MTLLoader()
+				.setPath( path ).load( modelName+".mtl", 
+					function ( materials ) {
+						materials.preload();
+						new THREE.OBJLoader()
+							.setMaterials( materials )
+							.setPath( path ).load( modelName+".obj", 
+							function ( object ) {
+								//object.rotateY(180);
+								object.castShadow = true;
+								object.receiveShadow = true;
+								object.traverse(function(o){
+									//scene.add( o );
+									o.castShadow = true;
+									o.receiveShadow = true;
+									console.log(o.name);
+									//if(o.name=="主体"){
+									//	o.castShadow = true;
+									//	o.receiveShadow = true;
+									//	console.log("日日日日日");
+									//}
+								});					
+								scene.add( object );
+								
+							}, onProgress, onError );
+					},onProgress, onError );	
+			
+			//console.log("finish:"+modelName);		
 		}
+		
 
 		var clock, firstPersonControl, orbitControl;
 		function createControl(){
@@ -199,7 +237,7 @@
 
 		var stats, AxesHelper;
 		function createItem(){
-			AxesHelper = new THREE.AxesHelper(10000);
+			AxesHelper = new THREE.AxesHelper(100000000);
 			//scene.add(AxesHelper);	
 			
 			stats = initStats();			
@@ -208,7 +246,8 @@
 		}
 
 		function createListener(){
-			document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+			document.addEventListener( 'mousemove', onDocumentMouseMove, false );			
+			window.addEventListener( 'resize', onWindowResize, false );
 		
 		}
 
@@ -224,6 +263,12 @@
 			
 			//相交判断
 			intersect();
+			
+			//infoArea.innerHTML = "";
+			//log();
+
+			//testshadow.update(light);
+			
             requestAnimationFrame(render);
             renderer.render(scene, camera);
         }
@@ -245,6 +290,14 @@
 			mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 			//mouse.x = ( event.clientX / WIDTH ) * 2 - 1;
 			//mouse.y = - ( event.clientY / HIGHT ) * 2 + 1;
+
+		}
+		function onWindowResize(){
+			WIDTH = window.innerWidth;
+			HIGHT = window.innerHeight;
+			renderer.setSize( WIDTH, HIGHT  );
+			camera.aspect = WIDTH/HIGHT;
+			camera.updateProjectionMatrix();
 
 		}
 		
@@ -275,23 +328,25 @@
 					//////////////////////////////////////////////////////////////////////////
 					//1.1.2 取intersects变量的第一个元素作为拾取到的
 					INTERSECTED = intersects[ 0 ].object;
-					//>判断对象上是否有多材质
-					if(INTERSECTED.material instanceof Array){
-						//>>高亮拾取对象中的每一个材质
-						for(var i= 0; i < INTERSECTED.material.length; i++){
-							var mat = INTERSECTED.material[i];						
-							INTERSECTED.currentHex = mat.emissive.getHex();
-							mat.emissive.setHex( 0xff0000 );			
+					if(INTERSECTED.name != "主体"){//主体不做处理
+						//>判断对象上是否有多材质
+						if(INTERSECTED.material instanceof Array){
+							//>>高亮拾取对象中的每一个材质
+							for(var i= 0; i < INTERSECTED.material.length; i++){
+								var mat = INTERSECTED.material[i];						
+								INTERSECTED.currentHex = mat.emissive.getHex();
+								mat.emissive.setHex( 0xff0000 );			
+							}
 						}
+						else{
+							//>>高亮拾取对象，一个材质
+							INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
+							INTERSECTED.material.emissive.setHex( 0xff0000 );					
+							//console.log(INTERSECTED.currentHex);
+						}										
 					}
-					else{
-						//>>高亮拾取对象，一个材质
-						INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
-						INTERSECTED.material.emissive.setHex( 0xff0000 );					
-						//console.log(INTERSECTED.currentHex);
-					}
-					
 					infoArea.innerHTML = INTERSECTED.name;
+					INTERSECTED.receiveShadow = true;
 					//console.log("new item.");
 
 				}
@@ -327,6 +382,10 @@
 				
 	
 		
+		}
+		
+		function log(){
+			infoArea.innerHTML  += Math.floor(camera.position.x) + ","+ Math.floor(camera.position.y) + "," +Math.floor(camera.position.z);
 		}
     }
 
