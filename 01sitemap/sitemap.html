@@ -31,17 +31,18 @@
 		}
 		.main-body{
 			margin:40px auto;
-			width:100%;
+			width:75%;
+			overflow:auto;
 		}		
 		.item{
 			margin:5px;
 			padding:5px;
 			background-color:#D2F9D9;
 			border:1px solid #18AF31;
-			border-radius:2px;
+			border-radius:8px;
 			float:left;
-			width:400px;
-			height:100px
+			width:31%;
+			/*height:100px;*/
 		}	
 		.item-title{
 			padding:2px auto;
@@ -55,6 +56,13 @@
 			position:fixed;
 			top:0;
 		}
+		.clear{
+			clear:left;
+		}
+		.test{
+			width:200px;
+			display:inline-block;
+		}
 	</style>
 </head>
 
@@ -63,7 +71,16 @@
 	<h1>各种[官方]参考文档网站收集</h1>
 </div>
 <div class="main-body">
-	<div class="item">
+	<!-- <div class="test"> -->
+		<!-- <p class="item-title">test1</p> -->
+		<!-- <ul> -->
+			<!-- <li><a href="http://www.cplusplus.com/" target="_blank">C++</a></li>	 -->
+			<!-- <li><a href="http://zh.cppreference.com/w/cpp" target="_blank">C++参考手册(中)</a></li> -->
+			<!-- <li><a href="https://www.boost.org/doc" target="_blank">boost</a></li> -->
+		<!-- </ul>	 -->
+	<!-- </div> -->
+
+	<div class="item clear">
 		<p class="item-title">C++</p>
 		<ul>
 			<li><a href="http://www.cplusplus.com/" target="_blank">C++</a></li>	
@@ -89,7 +106,7 @@
 		</ul>	
 	</div>
 	
-	<div class="item">
+	<div class="item clear">
 		<p class="item-title">Qt绘图库-QCustomPlot</p>
 		<ul>
 			<li><a href="http://www.qcustomplot.com/documentation/index.html" target="_blank">QCP官方</a></li>
@@ -114,7 +131,7 @@
 		</ul>	
 	</div>
 	
-	<div class="item">
+	<div class="item clear">
 		<p class="item-title">ProtoBuf</p>
 		<ul>
 			<li><a href="https://developers.google.com/protocol-buffers/docs/proto3" target="_blank">ProtoBuf官方</a></li>
@@ -130,7 +147,7 @@
 		</ul>	
 	</div>
 
-	<div class="item">
+	<div class="item clear">
 		<p class="item-title">GLSL-shader</p>
 		<ul>
 			<li><a href="https://www.khronos.org/registry/OpenGL/specs/gl/GLSLangSpec.1.20.pdf" target="_blank">[PDF]The OpenGL® Shading Language</a></li>
@@ -155,7 +172,7 @@
 		</ul>	
 	</div>
 		
-	<div class="item">
+	<div class="item clear">
 		<p class="item-title">Unity3D</p>
 		<ul>
 			<li><a href="https://docs.unity3d.com/Manual/index.html" target="_blank">官方</a></li>
@@ -180,7 +197,7 @@
 	</div>
 	
 	
-	<div class="item">
+	<div class="item clear">
 		<p class="item-title">常用工具</p>
 		<ul>
 			<li><a href="http://www.tool.la/ColorPicker/advancedColorPicker.swf" target="_blank">拾色器</a></li>	
