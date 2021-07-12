@@ -1,0 +1,28 @@
+# 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
+# 创建的文件:12.06.2018 21:58:31
+
+newmtl box
+	Ns 21.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.7922 0.2000 0.0392
+	Kd 0.7922 0.2000 0.0392
+	Ks 1.2510 1.2510 1.2510
+	Ke 0.0000 0.0000 0.0000
+
+newmtl Jade
+	Ns 74.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.1843 0.6627 0.3412
+	Kd 0.1843 0.6627 0.3412
+	Ks 1.7820 1.7820 1.7820
+	Ke 0.0235 0.2471 0.0000
+	map_Ka ./res/obj_jade/jade.png
+	map_Kd ./res/obj_jade/jade.png

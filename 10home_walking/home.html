@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <title>室内漫游 - tyw66</title>
+	<link rel="icon" href="../common/icon.ico" type="image/x-icon">
+	<meta charset='utf-8' />
+	<meta name="description" content="Visual house Walking. Use three.js and 3dsMax." />
+	<meta name="author" content="tyw66: tyw66@qq.com" />
+    <script type="text/javascript" src="../lib/ThreeJS/three.min.js"></script>	
+	<script type="text/javascript" src="../lib/ThreeJS/OBJLoader.js"></script>
+	<script type="text/javascript" src="../lib/ThreeJS/MTLLoader.js"></script>	
+	<script type="text/javascript" src="../lib/ThreeJS/OrbitControls.js"></script>
+	<script type="text/javascript" src="../lib/ThreeJS/FirstPersonControls.js"></script>
+	
+    <script type="text/javascript" src="../lib/stats.js"></script>
+    <script type="text/javascript" src="../lib/dat.gui.min.js"></script>
+	    
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+		#comment{			
+			position:absolute; 
+			top:10px; 
+			left:10px; 
+			z-index:1000;	
+			color:#FFF;
+
+			text-align: center;
+		}
+		#info-area{
+			position:absolute; 
+			top:40px; 
+			left:10px; 
+			z-index:1000;
+			
+			text-align: center;
+			color:#FFF;
+			font-size:3em;
+			
+		}
+
+    </style>
+</head>
+
+<body>
+
+<div id="Stats-output">
+</div>
+
+<div id="comment">
+	使用WASD进行移动，滑动鼠标查看四周。（初次加载较慢，模型大小4MB）
+</div>
+
+<div id="info-area">
+</div>
+
+<div id="WebGL-output">
+</div>
+<!--
+ <audio src="http://fs.w.kugou.com/201808301743/57217451ddf8b533ff81a3dba86fcc8a/G119/M07/00/09/V5QEAFox_hWAO70yADOpSxhZ3Mk004.mp3" 	controls autoplay>空空如也 
+</audio>
+-->
+<!-- Javascript ThreeJs code -->
+<script type="text/javascript">
+    window.onload = init;
+	
+    function init() {
+		//初始化通用变量
+		var WIDTH = window.innerWidth;
+		var HIGHT = window.innerHeight;
+		var mouse = new THREE.Vector2();
+		mouse.x = mouse.y = 0;
+			
+		var infoArea = document.getElementById("info-area");
+		//var modelList = ["main","door","furniture","biped","decorate","other"];
+		var modelList = ["0916"]		
+		var raycaster = new THREE.Raycaster();
+		var INTERSECTED;//上一帧选择的物体
+			
+			
+		//建立场景，包括相机、渲染器
+		createScene();
+		//建立灯光
+		createLights();
+		//建立模型
+		createModel(modelList);
+		//建立控制器
+		createControl();
+		//建立辅助性对象
+		createItem();
+		//建立事件关联
+		createListener();
+		//渲染相机里场景
+        render();
+
+		var scene, camera, renderer;		
+		function createScene(){
+			scene = new THREE.Scene();
+			camera = new THREE.PerspectiveCamera(60,  WIDTH/HIGHT , 0.1, 100000);
+			camera.position.x = -57;//100
+			camera.position.y = 66;//66
+			camera.position.z = -33;//500
+			camera.lookAt(scene.position);
+			camera.lookAt(-1,0,-1);	  
+			//camera.updateProjectionMatrix();
+			
+			renderer = new THREE.WebGLRenderer();
+			renderer.setClearColor(0xdddddd, 1.0);
+			renderer.setSize(window.innerWidth, window.innerHeight);
+
+			renderer.shadowMap.enabled = true;
+			
+			document.getElementById("WebGL-output").appendChild(renderer.domElement);
+			 
+	
+		}
+		
+		var ambientLight, spotLight, light, lightHelper;
+		function createLights(){
+			ambientLight = new THREE.AmbientLight(0x888888);
+			scene.add(ambientLight);		
+			
+			var light = new THREE.DirectionalLight( 0xDDDDDD, 1.0 );
+			light.position.set( 0, 500, -500 );//0, 500, -500
+			light.target.position.set( 180, 25, -67 );
+			light.angle = Math.PI / 8;
+			light.castShadow = true;
+			light.receiveShadow = true;
+			light.shadow.mapSize.width = 20;
+			light.shadow.mapSize.height = 20;
+			light.shadow.camera.near = 1;
+			light.shadow.camera.far = 20;
+			scene.add( light );
+
+			//spotLight = new THREE.SpotLight(0xffffff,0.6);
+			//spotLight.position.set(25, 20, -60);
+			//spotLight.castShadow = true;
+			//scene.add(spotLight);
+				
+			lightHelper = new THREE.SpotLightHelper( light );
+			//scene.add( lightHelper );		
+		}
+	
+
+		function createModel(){			
+			for(var i = 0; i < modelList.length; i++){	
+				loadModel('./model/', modelList[i]);
+			}
+				
+			//TEMP test
+			var cubeGeometry = new THREE.BoxGeometry(40, 40, 40);
+			var cubeMaterial = new THREE.MeshPhongMaterial({color: 0xf58cff, wireframe: false});
+			var test = new THREE.Mesh(cubeGeometry, cubeMaterial);
+			test.position.x = 131;
+			test.position.y = 20;
+			test.position.z = -323;
+			test.name = "testmodel";
+			test.receiveShadow = true;
+			test.castShadow = true;
+			scene.add( test );	
+			
+			var cubeGeometry1 = new THREE.BoxGeometry(20, 20, 20);
+			var cubeMaterial1 = new THREE.MeshPhongMaterial({color: 0x145c9f, wireframe: false});
+			var test1 = new THREE.Mesh(cubeGeometry1, cubeMaterial1);
+			test1.position.x = 200;
+			test1.position.y = 10;
+			test1.position.z = -283;
+			test1.name = "testmodel1";
+			test1.receiveShadow = true;
+			test1.castShadow = true;
+			scene.add( test1 );	
+			
+	
+
+		}
+		
+		function loadModel(path,modelName){
+			var onProgress = function ( xhr ) {
+				if ( xhr.lengthComputable ) {
+					var percentComplete = xhr.loaded / xhr.total * 100;
+					console.log( Math.round( percentComplete, 2 ) + '% downloaded' );
+				}
+			};
+			var onError = function ( xhr ) { };
+			
+			new THREE.MTLLoader()
+				.setPath( path ).load( modelName+".mtl", 
+					function ( materials ) {
+						materials.preload();
+						new THREE.OBJLoader()
+							.setMaterials( materials )
+							.setPath( path ).load( modelName+".obj", 
+							function ( object ) {
+								//object.rotateY(180);
+								object.castShadow = true;
+								object.receiveShadow = true;
+								object.traverse(function(o){
+									//scene.add( o );
+									o.castShadow = true;
+									o.receiveShadow = true;
+									console.log(o.name);
+									//if(o.name=="主体"){
+									//	o.castShadow = true;
+									//	o.receiveShadow = true;
+									//	console.log("日日日日日");
+									//}
+								});					
+								scene.add( object );
+								
+							}, onProgress, onError );
+					},onProgress, onError );	
+			
+			//console.log("finish:"+modelName);		
+		}
+		
+
+		var clock, firstPersonControl, orbitControl;
+		function createControl(){
+			//相机控制
+			clock = new THREE.Clock();
+			firstPersonControl = new THREE.FirstPersonControls(camera);
+			firstPersonControl.lookSpeed = 0.05; //鼠标移动查看的速度
+			firstPersonControl.movementSpeed = 100; //相机移动速度
+			firstPersonControl.lookVertical = true;
+			firstPersonControl.noFly = true;
+			firstPersonControl.constrainVertical = true; //约束垂直
+			
+			firstPersonControl.verticalMin = 1.0;
+			firstPersonControl.verticalMax = 2.0;
+			firstPersonControl.lon = -90; //进入初始视角x轴的角度
+			firstPersonControl.lat = 0; //初始视角进入后y轴的角度		
+
+			//orbitControl = new THREE.OrbitControls(camera,document.getElementById("WebGL-output"));
+		}
+
+		var stats, AxesHelper;
+		function createItem(){
+			AxesHelper = new THREE.AxesHelper(100000000);
+			//scene.add(AxesHelper);	
+			
+			stats = initStats();			
+
+
+		}
+
+		function createListener(){
+			document.addEventListener( 'mousemove', onDocumentMouseMove, false );			
+			window.addEventListener( 'resize', onWindowResize, false );
+		
+		}
+
+
+
+        function render() {
+            stats.update();   
+			//if(Math.abs(mouse.x) > 0.2 || Math.abs(mouse.y) > 0.2 ){
+			firstPersonControl.update(clock.getDelta());			
+			//}
+			//摄影机高度维持在人眼的高度
+			camera.position.y = 66;
+			
+			//相交判断
+			intersect();
+			
+			//infoArea.innerHTML = "";
+			//log();
+
+			//testshadow.update(light);
+			
+            requestAnimationFrame(render);
+            renderer.render(scene, camera);
+        }
+
+        function initStats() {
+            var stats = new Stats();
+            stats.setMode(0); // 0: fps, 1: ms
+            // Align top-left
+            stats.domElement.style.position = 'absolute';
+            stats.domElement.style.right = '0px';
+            stats.domElement.style.top = '0px';
+            document.getElementById("Stats-output").appendChild(stats.domElement);
+            return stats;
+        }
+
+		function onDocumentMouseMove( event ) {
+			event.preventDefault();
+			mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+			mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+			//mouse.x = ( event.clientX / WIDTH ) * 2 - 1;
+			//mouse.y = - ( event.clientY / HIGHT ) * 2 + 1;
+
+		}
+		function onWindowResize(){
+			WIDTH = window.innerWidth;
+			HIGHT = window.innerHeight;
+			renderer.setSize( WIDTH, HIGHT  );
+			camera.aspect = WIDTH/HIGHT;
+			camera.updateProjectionMatrix();
+
+		}
+		
+		//光线投射		
+		function intersect(){
+			raycaster.setFromCamera( mouse, camera );
+
+			var intersects = raycaster.intersectObjects( scene.children , true );
+			//1 当前选择了一个物体
+			if ( intersects.length > 0 ) {
+				//1.1 如果选择的是一个新物体
+				if ( INTERSECTED != intersects[ 0 ].object ) {
+					//1.1.1 恢复上一物体的颜色
+					if ( INTERSECTED ){							
+						//>判断对象上是否有多材质
+						if(INTERSECTED.material instanceof Array){
+							//>>高亮拾取对象中的每一个材质
+							for(var i= 0; i < INTERSECTED.material.length; i++){
+								var mat = INTERSECTED.material[i];	
+								mat.emissive.setHex("#000");	//不发光						
+							}
+						}
+						else{		
+							//>>恢复上一物体的颜色，一个材质			
+							INTERSECTED.material.emissive.setHex("#000");
+						}						
+					}	
+					//////////////////////////////////////////////////////////////////////////
+					//1.1.2 取intersects变量的第一个元素作为拾取到的
+					INTERSECTED = intersects[ 0 ].object;
+					if(INTERSECTED.name != "主体"){//主体不做处理
+						//>判断对象上是否有多材质
+						if(INTERSECTED.material instanceof Array){
+							//>>高亮拾取对象中的每一个材质
+							for(var i= 0; i < INTERSECTED.material.length; i++){
+								var mat = INTERSECTED.material[i];						
+								INTERSECTED.currentHex = mat.emissive.getHex();
+								mat.emissive.setHex( 0xff0000 );			
+							}
+						}
+						else{
+							//>>高亮拾取对象，一个材质
+							INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
+							INTERSECTED.material.emissive.setHex( 0xff0000 );					
+							//console.log(INTERSECTED.currentHex);
+						}										
+					}
+					infoArea.innerHTML = INTERSECTED.name;
+					INTERSECTED.receiveShadow = true;
+					//console.log("new item.");
+
+				}
+				//1.2 如果选择没有变，还是同一个物体 
+				else{
+					//console.log("no change.");
+				}
+			}
+			//2 当前没有选中物体
+			else {
+				//2.1 如果上一帧选择了物体,恢复物体颜色	（同1.1.1）
+				if ( INTERSECTED ){							
+					//判断对象上是否有多材质
+					if(INTERSECTED.material instanceof Array){
+						//>>高亮拾取对象中的每一个材质
+						for(var i= 0; i < INTERSECTED.material.length; i++){
+							var mat = INTERSECTED.material[i];	
+							mat.emissive.setHex("#000");							
+						}
+					}
+					else{		
+						//>>恢复上一物体的颜色，一个材质			
+						INTERSECTED.material.emissive.setHex("#000");
+					}
+					
+				}	
+				//2.2 置空
+				infoArea.innerHTML = "-";
+				INTERSECTED = null;
+
+			}
+				
+				
+	
+		
+		}
+		
+		function log(){
+			infoArea.innerHTML  += Math.floor(camera.position.x) + ","+ Math.floor(camera.position.y) + "," +Math.floor(camera.position.z);
+		}
+    }
+
+
+	
+</script>
+</body>
+</html>
