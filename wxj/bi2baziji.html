@@ -17,6 +17,7 @@
 </head>
 <body>
     <div class="text-content" id="text-content"></div>
+	<div class="next-content"></div>
 	<embed src="./KOEI-love.mp3" width=0 height=0></embed>
 	
 	<script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.5.1.min.js"></script>
@@ -27,7 +28,7 @@
 
         }
 
-        var time = 1000;
+        var time = 500;
         coder.prototype ={
             constructor: coder,
             load: function(code){
@@ -36,7 +37,7 @@
 					var con = $("text-content");
 					con.scrollTop = con.scrollHeight;
                 },time);
-                time = time+3000;
+                time = time+30;
             },
             setStyle: function(className,styles,seconds){
                 var seconds = seconds?seconds:0;
@@ -48,9 +49,21 @@
                         },time);
                     })(key);
                 }
-            }
+            },
+			showFoot:function(code){
+				setTimeout(function(){
+					$(".next-content").append(code);
+					},time);
+					time = time+1000;
+				}
         }
 
+		function submitTxt(txt){
+			alert(txt);
+		
+		}
+		
+		
         var c = new coder();
 
         c.load("平行宇宙3号：");
@@ -81,8 +94,14 @@
 		c.load("虽然不懂小猪具体在做什么，但是听着小猪一会儿一句周树人一会儿一句群文阅读一会儿一句茴香豆，");
 		c.load("然后传开了阵阵鼾声，");
 		c.load("老黄觉得幸福极了。");
+		c.load("");
+		c.load("寒来暑往，有喜有乐，小猪看上去翻开课本总是困困的样子，老黄看在眼里，急在心里。");
+		c.load("因为在他看来，小猪的方法和节奏都有改进的地方，如同用一把重而钝斧子去砍树一样。砍倒同样一棵树，消耗了更多的精力。");
+		c.load("但是小猪自己知道....");
 	   
-	   
+	    c.showFoot("<p>续写它们的故事</p>");
+
+		c.showFoot("<form  method='get' action=submitTxt><br /><textarea cols='50' rows='10'></textarea><input type='submit' value='Submit'></form>");
 	   
     </script>
 </body>
