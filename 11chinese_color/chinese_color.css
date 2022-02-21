@@ -1,0 +1,41 @@
+* {
+    color: #000;
+    padding: 0px;
+    margin: 0px;
+  
+    border: 1px dashed #33D;
+  }
+  
+  body {
+    background-color: #fff;
+    background-image: url("../common/bg_paper.jpg");
+    font-size: 20px;
+  }
+  
+  .titleArea {
+    font-size: 50px;
+    text-align: center;
+    margin:6px;
+  }
+  
+  #mainArea {
+	width:80%;
+	margin:0 auto;
+  }
+  
+  .solar-terms-name {
+  /*   writing-mode: vertical-lr; */
+    height: 100px;
+    width: 100px;
+  }
+  .color-name {
+    height: 100px;
+    width: 200px;
+    display:inline-block;
+  
+    background-color: #CCC;
+    
+    font-size: 20px;
+    vertical-align:middle;
+  }
+  
