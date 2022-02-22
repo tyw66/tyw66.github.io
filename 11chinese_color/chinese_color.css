@@ -3,7 +3,7 @@
     padding: 0px;
     margin: 0px;
   
-    border: 1px dashed #33D;
+    /* border: 1px dashed #333; */
   }
   
   body {
@@ -14,13 +14,16 @@
   
   .titleArea {
     font-size: 50px;
+    font-weight:bold;
+    font-family: "宋体";
     text-align: center;
     margin:6px;
   }
   
   #mainArea {
 	width:80%;
-	margin:0 auto;
+  margin:0 auto;
+  font-family: "仿宋";
   }
   
   .solar-terms-name {
