@@ -2,43 +2,59 @@
     color: #000;
     padding: 0px;
     margin: 0px;
-  
     /* border: 1px dashed #333; */
-  }
-  
-  body {
-    background-color: #fff;
+}
+
+body {
+    background-color: #FFF;
     background-image: url("../common/bg_paper.jpg");
     font-size: 20px;
-  }
-  
-  .titleArea {
+}
+
+.titleArea {
     font-size: 50px;
-    font-weight:bold;
+    font-weight: bold;
     font-family: "宋体";
     text-align: center;
-    margin:6px;
-  }
-  
-  #mainArea {
-	width:80%;
-  margin:0 auto;
-  font-family: "仿宋";
-  }
-  
-  .solar-terms-name {
-  /*   writing-mode: vertical-lr; */
-    height: 100px;
-    width: 100px;
-  }
-  .color-name {
-    height: 100px;
-    width: 200px;
-    display:inline-block;
-  
-    background-color: #CCC;
-    
+    margin: 6px;
+}
+
+#mainArea {
+    width: 80%;
+    margin: 0 auto;
+    font-family: "仿宋";
+}
+
+.termArea {
+    margin: 0 auto;
+}
+
+.termArea * {
+    border: 1px dotted #333;
+}
+
+.term-name {
+    background-color: #f1f1f1;
+}
+
+.weather-name {
+    height: 150px;
+    width: 5%;
+    display: inline-block;
+    margin-left: 50px;
+    /* background-color: #EEE; */
+    font-size: 30px;
+    font-family: "楷体";
+    text-align: center;
+    vertical-align: middle;
+    /* writing-mode: vertical-lr; */
+}
+
+.color-name {
+    height: 150px;
+    width: 20%;
+    display: inline-block;
+    background-color: #EEE;
     font-size: 20px;
-    vertical-align:middle;
-  }
-  
+    vertical-align: middle;
+}
