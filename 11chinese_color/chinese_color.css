@@ -3,6 +3,7 @@
     padding: 0px;
     margin: 0px;
     /* border: 1px dashed #333; */
+    /* font-family: "Times New Roman", Times, serif; */
 }
 
 body {
@@ -12,7 +13,7 @@ body {
 }
 
 .titleArea {
-    font-size: 50px;
+    font-size: 3em;
     font-weight: bold;
     font-family: "宋体";
     text-align: center;
@@ -20,7 +21,7 @@ body {
 }
 
 #mainArea {
-    width: 80%;
+    width: 90%;
     margin: 0 auto;
     font-family: "仿宋";
 }
@@ -30,7 +31,11 @@ body {
 }
 
 .termArea * {
-    border: 1px dotted #333;
+    /* border: 1px dotted #333; */
+}
+
+.weatherArea {
+    margin: auto;
 }
 
 .term-name {
@@ -38,12 +43,13 @@ body {
 }
 
 .weather-name {
-    height: 150px;
-    width: 5%;
     display: inline-block;
-    margin-left: 50px;
+    width: 10%;
+    /* height: 5em; */
+    margin: 0;
+    padding: 0.5em 0.5em;
     /* background-color: #EEE; */
-    font-size: 30px;
+    font-size: 1.5em;
     font-family: "楷体";
     text-align: center;
     vertical-align: middle;
@@ -51,10 +57,14 @@ body {
 }
 
 .color-name {
-    height: 150px;
-    width: 20%;
+    height: 5em;
+    width: 18%;
     display: inline-block;
     background-color: #EEE;
-    font-size: 20px;
+    font-size: 1.2em;
+    text-align: center;
     vertical-align: middle;
+    /* padding: 1em 0px 0px 0px; */
+    border: 1px dotted #333;
+    /* font-family: "Comic Sans MS", cursive, sans-serif; */
 }
