@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>28的傻气</title>
+    <style>
+        .text-content {
+            background: rgb(250, 223, 219);
+            color: rgba(255, 71, 16, 0.911);
+            border: 1px solid #eee;
+        }
+        
+        .text-content .each-line {
+            width: 0;
+            overflow: hidden;
+            white-space: nowrap;
+            line-height: 26px;
+            animation: textShow 5s forwards;
+        }
+        
+        @keyframes textShow {
+            from {
+                width: 0px;
+            }
+            to {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="text-content" id="text-content"></div>
+    <div class="next-content"></div>
+    <embed src="./KOEI-love.mp3" width=0 height=0></embed>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.5.1.min.js"></script>
+    <script>
+        var m = 0;
+        var coder = function() {}
+        var time = 500;
+        coder.prototype = {
+            constructor: coder,
+            load: function(code) {
+                setTimeout(function() {
+                    $(".text-content").append("<p class='each-line'>" + code + "</p>");
+                    var con = $("text-content");
+                    con.scrollTop = con.scrollHeight;
+                }, time);
+                time = time + 3000;
+            },
+            setStyle: function(className, styles, seconds) {
+                var seconds = seconds ? seconds : 0;
+                for (var key in styles) {
+                    (function(key) {
+                        time += seconds;
+                        setTimeout(function() {
+                            $("." + className).css(key, styles[key]);
+                        }, time);
+                    })(key);
+                }
+            },
+            showFoot: function(code) {
+                setTimeout(function() {
+                    $(".next-content").append(code);
+                }, time);
+                time = time + 1000;
+            }
+        }
+
+        function submitTxt(txt) {
+            alert(txt);
+
+        }
+
+        var c = new coder();
+
+        c.load("亲爱的玮玮子：");
+        c.load("    ");
+        c.load("生日快乐呀 *^_^*");
+        c.load("一不小心就有了这个荣幸可以见证你27的傻气，也期待继续见证您28的傻气。");
+        c.load("    ");
+        c.load("虽然相伴只两个月，但我们已结下了深厚的革命友谊，而这一切都要从28年前的今天说起：");
+        c.load("那是1992年的7月19日，这注定是不平凡的一天。");
+        c.load("因为在那一天，一个憨憨在大家的期盼中终于来到这个世上，");
+        c.load("他的到来，给爱他的人带来的欢乐，也因他的到来才有了28年后的今日我吃到嘴里的蛋糕。");
+        c.load("感恩7.19，感恩这不平凡的憨憨。");
+        c.load("    ");
+        c.load("随着时间的流逝，这名小憨憨在历经了人世的美好与美好后，逐渐成长为大憨~：");
+        c.load("时常出现在他脸上的，是吃了烧烤般的笑容；");
+        c.load("是买到游戏后的满足；");
+        c.load("是暗藏明眼人一眼就能看出小阴谋的奸邪眼神；");
+        c.load("当然，还有日复一日熬夜搬砖的黑眼圈（照~镜子吧！）");
+        c.load("    ");
+        c.load("虽然生活也不尽是美好，但还是恭喜这位憨憨一路披荆斩棘闯到了28或是29岁的关卡。");
+        c.load("更要贺喜，28年的历练只是改变了他俊俏的容颜，而未改变他简单、单纯的内心（或许吧···）");
+        c.load("至此，向这位憨~献上我深深的敬意！");
+        c.load("    ");
+        c.load("当然，在这绝对特殊的日子，一定不能落下的是我最~诚挚地祝福：");
+        c.load("祝老寿星寿辰快乐，未来的每一天多吃不胖，晚睡不老。");
+        c.load("天天有人念，日日有人思（捏脸）；幸福美满，早日走上人生巅峰（癫疯？？？）");
+        c.load("重点来了：早日实现捏脚自由！！！");
+        c.load("    ");
+        c.load("2020.7.19");
+    </script>
+</body>
+
+</html>
