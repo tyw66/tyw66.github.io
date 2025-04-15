@@ -1,11 +1,11 @@
 *{
-	color:#fff;
+    color:#395B86;
     padding:0;
     margin:0;
 	
 }
 body{
-	background-color:black;
+	background-color:#DAE7F7;
 	background-image:url("./bg1.png");
 	font-size:24px;
 }
@@ -68,7 +68,7 @@ a li:hover{
 
 .proj-item li{
 	list-style-type:none;
-	border:1px #CCC solid;
+	border:1px #34455B solid;
 	margin:0 0 18px 0;
 	padding:10px 0 10px 10px;
 	
