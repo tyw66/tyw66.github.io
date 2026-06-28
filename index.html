@@ -1,83 +1,173 @@
-<!--HTML 5 -->
 <!DOCTYPE html>
-<html>
-
+<html lang="zh-CN">
 <head>
-    <title>躺赢王の小站</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link rel="icon" href="./common/icon.ico" type="image/x-icon" />
-    <link rel="stylesheet" href="./layout.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>一尾·Studio</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>😜Hello,this is tyw66's website!😜</h1>
-        <nav></nav>
-
-        <div class="left">
-        </div>
-
-        <div class="middle">
-            <ul class="proj-item">
-                <a href='./11chinese_color/chinese_color.html' title="2022/2/21">
-                    <li>中国传统色</li>
-                </a>
-                <a href='./10home_walking/home.html' title="2018/8/13">
-                    <li>室内漫游</li>
-                </a>
-                <a href='./09panorama/Panorama.html' title="2018/6/18">
-                    <li>全景图测试</li>
-                </a>
-                <a href='./08objviewer/ObjViewer.html' title="2018/6/6">
-                    <li>OBJ格式三维模型浏览器</li>
-                </a>
-                <a href='./07JS&DOM_ch12/index.html' title="2018/5/19">
-                    <li>《Javascript Dom编程艺术》最后一个大案例</li>
-                </a>
-                <a href='./06canvas/canvas.html' title="2018/5/17">
-                    <li>canvas测试</li>
-                </a>
-                <a href='./05pump_it/index.html' title="2018/5/14">
-                    <li>Bili鬼畜全明星Bili</li>
-                </a>
-                <a href='./04gallery/index.html' title="2018/5/8">
-                    <li>我的画廊</li>
-                </a>
-                <a href='./02four_sphere/4sphere.html' title="2018/4/22">
-                    <li>图形学学习：4个球体[demo]</li>
-                </a>
-                <a href='./03sketch_scene/index.html' title="2018/4/22">
-                    <li>图形学学习：素描渲染场景[demo]</li>
-                </a>
-            </ul>
-        </div>
-
-        <div class="right">
-            <div class="web-info">
-                <div id='dateNav'>date</div>
-                <div id='timeSpan'>time</div>
-		<span id="busuanzi_container_site_pv">总访问量<span id="busuanzi_value_site_pv"></span>次</span>
-            </div>
-            <div class="site-map">
-                <a href="./01sitemap/sitemap.html" title="2018/4/15">常用网站</a>
-            </div>
-            <div class="site-map">
-                <a href="./blog/index.html" title="2020/5/10">博客</a>
-            </div>
-            <div class="site-map">
-                <a href="./wxj/index.html" title="2021/9/6">Love</a>
-            </div>
-        </div>
-
-
-        <div class="buttom">
-            <p id='copyRight'></p>
-        </div>
-      
+  <!-- ===== Navbar ===== -->
+  <nav class="navbar" id="navbar">
+    <div class="container nav-container">
+      <a href="#hero" class="nav-logo">
+        <img src="public\\images\\projects\\avatar.png" alt="Avatar" class="nav-avatar" />
+        <span class="nav-brand">一尾·Studio</span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#hero" class="nav-link active">首页</a></li>
+        <li><a href="#projects" class="nav-link">小玩意儿</a></li>
+        <li><a href="#about" class="nav-link">关于</a></li>
+      </ul>
+      <button class="hamburger" id="hamburger" aria-label="菜单">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
     </div>
+  </nav>
 
-    <script type="text/javascript" src="./bundle.js"></script>
-    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-    <noscript><p>本页面需要启用javascript保证最佳体验哈</p></noscript>
+  <!-- ===== Hero Section ===== -->
+  <section class="hero" id="hero">
+    <div class="hero-bg"></div>
+    <div class="container hero-content">
+      <p class="hero-greeting reveal">你好，我是</p>
+      <h1 class="hero-name reveal">一尾66</h1>
+      <p class="hero-tagline reveal">爱用代码/软件/2B铅笔画画</p>
+      <div class="hero-cta reveal">
+        <a href="#projects" class="btn btn-primary">
+          小玩意儿
+          <i data-lucide="arrow-down" class="btn-icon"></i>
+        </a>
+        <a href="#about" class="btn btn-outline">关于我</a>
+      </div>
+    </div>
+    <div class="scroll-indicator reveal">
+      <i data-lucide="chevron-down"></i>
+    </div>
+  </section>
+
+  <!-- ===== Projects Section ===== -->
+  <section class="projects section" id="projects">
+    <div class="container">
+      <h2 class="section-title reveal">小玩意儿</h2>
+      <div class="projects-grid" id="projectsGrid">
+        <!-- 动态渲染 -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Project Modal ===== -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal" id="modal" role="dialog" aria-modal="true">
+      <button class="modal-close" id="modalClose" aria-label="关闭">
+        <i data-lucide="x"></i>
+      </button>
+      <div class="modal-body">
+        <div class="modal-image" id="modalImage"></div>
+        <div class="modal-info">
+          <h3 class="modal-title" id="modalTitle"></h3>
+          <p class="modal-description" id="modalDescription"></p>
+          <div class="modal-tech" id="modalTech"></div>
+          <a href="#" class="btn btn-primary modal-link" id="modalLink" target="_blank" rel="noopener">
+            在线预览
+            <i data-lucide="external-link" class="btn-icon"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  <!-- ===== About Section ===== -->
+  <section class="about section" id="about">
+    <div class="container">
+      <h2 class="section-title reveal">关于我</h2>
+      <div class="about-grid">
+        <div class="about-text reveal">
+          <p class="about-intro">
+            一名爱画画的程序猿。
+          </p>
+          <p class="about-intro">
+            随缘学习，随缘工作。
+          </p>
+          <div class="about-experience reveal">
+            <div class="exp-item">
+              <span class="exp-year">2020 - 至今</span>
+              <span class="exp-role">资深搬砖工程师</span>
+            </div>
+            <div class="exp-item">
+              <span class="exp-year">2017 - 2020</span>
+              <span class="exp-role">搬砖工程师</span>
+            </div>
+            <div class="exp-item">
+              <span class="exp-year">2014 - 2017</span>
+              <span class="exp-role">搬砖学徒</span>
+            </div>
+          </div>
+        </div>
+        <div class="about-visual reveal">
+          <div class="avatar-placeholder">
+            <img src="public\\images\\projects\\avatar.png" alt="Avatar"/>
+          </div>
+        </div>
+      </div>
+
+      <!-- Skills -->
+      <div class="skills-section reveal">
+        <h3 class="skills-title">技能栈</h3>
+        <div class="skills-cloud">
+          <span class="skill-tag">C++</span>
+          <span class="skill-tag">Qt</span>
+          <span class="skill-tag">Python</span>
+          <span class="skill-tag">HTML5</span>
+          <span class="skill-tag">CSS3</span>
+          <span class="skill-tag">JavaScript</span>
+          <span class="skill-tag">Godot</span>
+          <span class="skill-tag">工业仿真</span>
+          <span class="skill-tag">Photoshop</span>
+          <span class="skill-tag">Affinity Designer</span>
+          <span class="skill-tag">交互设计</span>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- ===== Footer ===== -->
+  <footer class="footer">
+    <div class="container footer-content">
+      <div class="footer-social">
+        <a href="https://www.github.com/tyw66" class="social-link" aria-label="GitHub">
+          <i data-lucide="github"></i>
+        </a>
+        <a href="https://www.zhihu.com/people/tyw66" class="social-link" aria-label="Zhihu">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M13.4 6.2h4.8v1.5h-4.8V6.2zm0 3h4.8v1.5h-4.8V9.2zm-3.1 6.5l-1.1-3.2c-.2-.4-.3-.8-.3-1.2 0-.5.1-1 .3-1.4l2.8-8.2h2.1l-2.7 8.2v4.3H9.1v-1.9l1.2 3.4zm4.5-3.1c-.4 0-.8-.1-1.1-.3-.3-.2-.5-.5-.5-.9s.2-.7.5-.9c.3-.2.7-.3 1.1-.3s.8.1 1.1.3c.3.2.5.5.5.9s-.2.7-.5.9c-.3.2-.7.3-1.1.3z"/>
+          </svg>
+        </a>
+        <a href="https://www.xiaoheihe.cn/app/user/profile/82194216" class="social-link" aria-label="Xiaoheihe">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="4" width="16" height="16" rx="4"/>
+            <circle cx="9" cy="11" r="1.5"/>
+            <circle cx="15" cy="11" r="1.5"/>
+            <path d="M9 15c.8.8 2 1.5 3 1.5s2.2-.7 3-1.5"/>
+          </svg>
+        </a>
+      </div>
+      <p class="footer-copy">&copy; 2026 一尾66. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="js/projects.js"></script>
+  <script src="js/main.js"></script>
 </body>
-
 </html>

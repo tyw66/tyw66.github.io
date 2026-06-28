@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日漫一百年</title>
+    <link rel="stylesheet" href="/projects/manga_history/styles.css">
+</head>
+<body>
+    <header class="header">
+        <h1>日漫一百年</h1>
+        <p class="subtitle">纵览日漫作品</p>
+    </header>
+
+    <main class="main-content">
+        <div class="timeline-container">
+            <div class="timeline-line"></div>
+            <div class="timeline-nodes" id="timelineNodes"></div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>由日漫作品爱好者制作</p>
+    </footer>
+
+    <div class="sidebar" id="sidebar">
+        <button class="sidebar-close" id="sidebarClose">×</button>
+        <div class="sidebar-content">
+            <img class="sidebar-image" id="sidebarImage" src="" alt="" style="display: none;">
+            <h2 class="sidebar-name" id="sidebarName"></h2>
+            <div class="sidebar-meta">
+                <span class="sidebar-date" id="sidebarDate"></span>
+                <span class="sidebar-author" id="sidebarAuthor"></span>
+            </div>
+            <p class="sidebar-description" id="sidebarDescription"></p>
+        </div>
+    </div>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <script src="/projects/manga_history/script.js"></script>
+</body>
+</html>
