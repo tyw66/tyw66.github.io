@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
   <title>一尾·Studio</title>
 
   <!-- Google Fonts -->
@@ -13,14 +14,14 @@
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <!-- ===== Navbar ===== -->
   <nav class="navbar" id="navbar">
     <div class="container nav-container">
       <a href="#hero" class="nav-logo">
-        <img src="public\\images\\projects\\avatar.png" alt="Avatar" class="nav-avatar" />
+        <img src="public\\images\\avatar.png" alt="Avatar" class="nav-avatar" />
         <span class="nav-brand">一尾·Studio</span>
       </a>
       <ul class="nav-links" id="navLinks">
@@ -66,28 +67,6 @@
     </div>
   </section>
 
-  <!-- ===== Project Modal ===== -->
-  <div class="modal-overlay" id="modalOverlay">
-    <div class="modal" id="modal" role="dialog" aria-modal="true">
-      <button class="modal-close" id="modalClose" aria-label="关闭">
-        <i data-lucide="x"></i>
-      </button>
-      <div class="modal-body">
-        <div class="modal-image" id="modalImage"></div>
-        <div class="modal-info">
-          <h3 class="modal-title" id="modalTitle"></h3>
-          <p class="modal-description" id="modalDescription"></p>
-          <div class="modal-tech" id="modalTech"></div>
-          <a href="#" class="btn btn-primary modal-link" id="modalLink" target="_blank" rel="noopener">
-            在线预览
-            <i data-lucide="external-link" class="btn-icon"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  
   <!-- ===== About Section ===== -->
   <section class="about section" id="about">
     <div class="container">
@@ -117,7 +96,7 @@
         </div>
         <div class="about-visual reveal">
           <div class="avatar-placeholder">
-            <img src="public\\images\\projects\\avatar.png" alt="Avatar"/>
+            <img src="public\\images\\avatar.png" alt="Avatar"/>
           </div>
         </div>
       </div>
@@ -167,7 +146,7 @@
     </div>
   </footer>
 
-  <script src="js/projects.js"></script>
-  <script src="js/main.js"></script>
+  <script src="projects/projects.js"></script>
+  <script src="main.js"></script>
 </body>
 </html>
