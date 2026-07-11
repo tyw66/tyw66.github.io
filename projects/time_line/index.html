@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <title></title>
+    <title>长河志 | Chronoriver</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
@@ -17,7 +17,14 @@
     </header>
 
     <div class="filter-bar" id="filterBar">
+        <div class="site-logo">
+            <img src="cover.jpg" alt="长河志" class="logo-image">
+            <span class="logo-text">长河志 | Chronoriver</span>
+        </div>
         <div class="filter-container">
+            <div class="source-select-wrapper">
+                <select class="source-select" id="sourceSelect"></select>
+            </div>
             <div class="filter-select-wrapper" id="filterSelectWrapper">
                 <input type="text" class="filter-input" id="filterInput" readonly placeholder="选择标签筛选">
                 <span class="filter-arrow" id="filterArrow">▼</span>
@@ -33,6 +40,7 @@
                 <span>清除筛选</span>
             </div>
         </div>
+        <div class="site-slogan">时间长河下的文明</div>
     </div>
 
     <main class="main-content">

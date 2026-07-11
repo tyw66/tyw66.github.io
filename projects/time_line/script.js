@@ -18,17 +18,26 @@ class TimelineApp {
         this.filterCount = document.getElementById('filterCount');
         this.filterClear = document.getElementById('filterClear');
         
+        this.sourceSelect = document.getElementById('sourceSelect');
+        
+        this.dataSources = [
+            { label: '日本漫画史', path: 'manga' },
+            { label: '日本战国史', path: 'sengoku' }
+        ];
+        
         this.events = [];
         this.currentNode = null;
         this.sidebarVisible = false;
         this.filterDropdownOpen = false;
         this.selectedTag = null;
         this.tagCounts = {};
+        this.currentSource = this.getSavedSource();
         
         this.init();
     }
     
     async init() {
+        this.renderSourceOptions();
         await this.loadEvents();
         this.buildTagCounts();
         this.renderFilterDropdown();
@@ -36,9 +45,35 @@ class TimelineApp {
         this.bindEvents();
     }
     
+    getSavedSource() {
+        const saved = localStorage.getItem('timelineSource');
+        if (saved) {
+            const exists = this.dataSources.some(s => s.path === saved);
+            if (exists) return saved;
+        }
+        return this.dataSources[0].path;
+    }
+    
+    saveSource(sourcePath) {
+        localStorage.setItem('timelineSource', sourcePath);
+    }
+    
+    renderSourceOptions() {
+        this.sourceSelect.innerHTML = '';
+        this.dataSources.forEach(source => {
+            const option = document.createElement('option');
+            option.value = source.path;
+            option.textContent = source.label;
+            if (source.path === this.currentSource) {
+                option.selected = true;
+            }
+            this.sourceSelect.appendChild(option);
+        });
+    }
+    
     async loadEvents() {
         try {
-            const response = await fetch('manga/data.json');
+            const response = await fetch(`${this.currentSource}/data.json`);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -48,7 +83,7 @@ class TimelineApp {
             if (data.title) {
                 const h1 = document.querySelector('header h1');
                 if (h1) h1.textContent = data.title;
-                document.title = data.title;
+                //document.title = data.title;
             }
             
             if (data.description) {
@@ -212,7 +247,11 @@ class TimelineApp {
             events.sort((a, b) => new Date(a.date) - new Date(b.date));
         });
         
-        for (let year = 1945; year <= 2045; year++) {
+        const years = Array.from(eventMap.keys());
+        const minYear = years.length > 0 ? Math.min(...years) - 5 : 1945;
+        const maxYear = years.length > 0 ? Math.max(...years) + 5 : 2045;
+        
+        for (let year = minYear; year <= maxYear; year++) {
             yearRange.push({
                 year: year,
                 events: eventMap.get(year) || []
@@ -264,7 +303,7 @@ class TimelineApp {
                         image.onerror = function() {
                             this.style.display = 'none';
                         };
-                        image.src = `manga/${event.id}.jpg`; 
+                        image.src = `${this.currentSource}/${event.id}.jpg`; 
                         card.appendChild(image);
                     }
                     
@@ -336,6 +375,21 @@ class TimelineApp {
                 this.closeFilterDropdown();
             }
         });
+        
+        this.sourceSelect.addEventListener('change', (e) => {
+            this.switchSource(e.target.value);
+        });
+    }
+    
+    async switchSource(sourcePath) {
+        this.currentSource = sourcePath;
+        this.saveSource(sourcePath);
+        this.hideSidebar();
+        this.clearFilter();
+        await this.loadEvents();
+        this.buildTagCounts();
+        this.renderFilterDropdown();
+        this.renderTimeline();
     }
     
     handleNodeHover(e) {
@@ -407,7 +461,7 @@ class TimelineApp {
             this.sidebarImage.onerror = () => {
                 this.sidebarImage.style.display = 'none';
             };
-            this.sidebarImage.src = `manga/${event.id}.jpg`; 
+            this.sidebarImage.src = `${this.currentSource}/${event.id}.jpg`; 
         } else {
             this.sidebarImage.style.display = 'none';
         }
