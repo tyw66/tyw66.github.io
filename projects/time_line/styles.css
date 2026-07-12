@@ -392,7 +392,8 @@ body {
 .filter-select-wrapper {
     position: relative;
     width: 100%;
-    max-width: 600px;
+    max-width: 800px;
+    flex: 1;
 }
 
 .filter-input {
@@ -738,7 +739,7 @@ body {
     font-size: 0.8rem;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1080px) {
     .header h1 {
         font-size: 2rem;
     }
@@ -756,20 +757,11 @@ body {
     }
 
     .site-logo {
-        gap: 6px;
-    }
-
-    .logo-image {
-        width: 24px;
-        height: 24px;
-    }
-
-    .logo-text {
-        font-size: 0.85rem;
+        display: none;
     }
 
     .site-slogan {
-        font-size: 0.75rem;
+        display: none;
     }
 
     .source-select {
@@ -779,7 +771,7 @@ body {
     }
 
     .filter-select-wrapper {
-        max-width: 200px;
+        max-width: 100%;
     }
 
     .filter-input {
@@ -876,23 +868,6 @@ body {
 
     .filter-container {
         gap: 6px;
-    }
-
-    .site-logo {
-        gap: 4px;
-    }
-
-    .logo-image {
-        width: 20px;
-        height: 20px;
-    }
-
-    .logo-text {
-        font-size: 0.7rem;
-    }
-
-    .site-slogan {
-        font-size: 0.65rem;
     }
 
     .source-select {
