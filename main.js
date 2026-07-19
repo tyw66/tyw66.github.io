@@ -36,7 +36,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const projectId = card.dataset.projectId;
         const project = projects.find(p => p.id === projectId);
         if (project && project.link) {
-          window.open(project.link, '_blank');
+          let url = project.link;
+          if (!url.match(/^https?:\/\//i)) {
+            if (!url.startsWith('/')) {
+              url = '/' + url;
+            }
+          }
+          window.open(url, '_blank');
         }
       });
     });
