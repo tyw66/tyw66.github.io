@@ -28,5 +28,15 @@ const projects = [
     link: 'projects/chinese_color/index.html',  
     featured: false,
     gradient: 'linear-gradient(135deg, #D35400, #E74C3C, #C0392B)'
+  },
+  {
+    id: '2026-09-30',
+    title: '周末去哪玩',
+    description: '200个成都及周边3小时内可达景点',
+    techStack: ['生活','旅游','风景'],
+    thumbnail: 'projects/happy_weekend/cover.png',
+    link: 'projects/happy_weekend/index.html',  
+    featured: false,
+    gradient: 'linear-gradient(135deg, #D35400, #E74C3C, #C0392B)'
   }
 ];
